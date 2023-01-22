@@ -1,8 +1,9 @@
 
 var chalk = require('chalk')
-var { envFileToObject, objectStringToEnvString } = require("./helpers")
 var fs = require('fs');
 var JavaScriptObfuscator = require('javascript-obfuscator');
+//ours
+var { envFileToObject, objectStringToEnvString } = require("../../helpers")
 var config = require(process.env.PWD + '/scripts.config.js')
 
 // SYNOPSIS

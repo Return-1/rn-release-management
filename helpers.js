@@ -17,23 +17,29 @@ const versionToNumber = (val) => {
 }
 
 function envFileToObject(pathToEnv) {
-    //read the file
-    let data = fs.readFileSync(pathToEnv).toString()
-    console.log(data)
-    let result = envStringToObjectString(data);
-    console.log(result)
-    let objectToBeReturned = parseLoose(result)
-    return objectToBeReturned
+
+    //This turns the env string of the form const envData = {...}
+    //into a string that is basically a simple object {...}
+    const envStringToObjectString = (data) => {
+        let splitArray = data.split('\n');
+        splitArray.pop()
+        splitArray.shift();
+        splitArray.unshift("{");
+        return splitArray.join('\n')
+    }
+
+    //read the env file
+    let envDataFileString = fs.readFileSync(pathToEnv).toString()
+    //turn it into a js object
+    let envObjectString = envStringToObjectString(envDataFileString);
+    let envObject = parseLoose(envObjectString)
+    //finally this is a javascript string
+    return envObject
 }
 
-function envStringToObjectString(data) {
-    let splitArray = data.split('\n');
-    splitArray.pop()
-    splitArray.shift();
-    splitArray.unshift("{");
-    return splitArray.join('\n')
-}
-
+//This turns a string that containts js object {...}
+//formatted data into the const envData = {...}
+//structure that the app modules expect on import
 function objectStringToEnvString(data) {
     let splitArray = data.split('\n');
     splitArray.shift();
@@ -46,7 +52,8 @@ function objectStringToEnvString(data) {
 const runStep = ({ scriptName, params, successMessage, failMessage }) => {
     logStep(`Calling ${scriptName}`)
     const paramValues = params.map(param => param.value)
-    var procX = spawnSync("node", [__dirname + "/" + scriptName, ...paramValues], { stdio: "inherit" })
+    const scriptDir = __dirname + "/steps/" + scriptName + "/" + scriptName + ".js"
+    var procX = spawnSync("node", [scriptDir, ...paramValues], { stdio: "inherit" })
     if (procX.status !== 0) {
         console.log(chalk.red(failMessage))
         process.exit(1);
@@ -54,6 +61,7 @@ const runStep = ({ scriptName, params, successMessage, failMessage }) => {
     console.log(chalk.green(successMessage))
 }
 
+//SIMPLY DISPLAY
 const logStep = (value) => {
     console.log(chalk.inverse(`
 ${'#'.repeat(value ? value.length + 8 : 12)}

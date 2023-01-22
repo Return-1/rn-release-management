@@ -33,22 +33,23 @@ if (!application || !environment || !version) {
 console.log(`Running for ${application} | ${environment} | ${version}`)
 if (program.desc) { console.log(`Description: ${program.desc}`) }
 
+
 runStep({
-    scriptName: "generateEnvFile.js",
+    scriptName: "generateEnvFile",
     params: [{ value: application }, { value: environment }, { label: "withOrWithoutLogs", value: true }],
     successMessage: "env.js generatated successfully",
     failMessage: "!!! There was an error while generating the envs",
 })
 
 runStep({
-    scriptName: "generateApk.js",
+    scriptName: "generateApk",
     params: [{ value: application }, { value: environment }, { value: versionWithDescription, }],
     successMessage: "APKs generated succesfully",
     failMessage: "!!! There was an error while generating the apks"
 })
 
 runStep({
-    scriptName: "generateApkSizeHistory.js",
+    scriptName: "generateApkSizeHistory",
     params: [{ value: application }, { value: environment }, { value: versionWithDescription, }],
     successMessage: "History apk size has been succesfully created",
     failMessage: "!!! There was an error while writing the  history apk size",

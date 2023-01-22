@@ -1,9 +1,9 @@
 let { spawnSync } = require('child_process');
 const chalk = require('chalk')
 var fs = require('fs');
-
+//ours
 var config = require(process.env.PWD + '/scripts.config.js')
-var { isVersionStringValid } = require("./helpers");
+var { isVersionStringValid } = require("../../helpers");
 
 const application = config.allowedApps[process.argv[2]];
 const environment = config.allowedEnvironments[process.argv[3]];
