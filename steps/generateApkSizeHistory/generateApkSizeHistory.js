@@ -1,11 +1,17 @@
 const fs = require('fs')
 const chalk = require('chalk')
+const { getScriptParamsAsObject } = require("../../helpers")
 
-const config = require(process.env.PWD + '/scripts.config.js')
+const { cliProps: {
+    application,
+    environment,
+    version,
+}, userProps: {
 
-const version = process.argv[4]
-const application = config.allowedApps[process.argv[2]]
-const environment = config.allowedEnvironments[process.argv[3]]
+}
+} = getScriptParamsAsObject(process.argv)
+
+//TODO: This will soon go check readme
 const enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1)
 
 let loggerFile;

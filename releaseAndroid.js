@@ -35,40 +35,43 @@ console.log(`Running for ${application} | ${environment} | ${version} and will p
 if (program.desc) { console.log(`Description: ${program.desc}`) }
 
 config.stepsToRun.forEach((step, i) => {
+
+    const allContext = { cliProps: { application, environment, version, description, outputFileName, projectPath: process.env.PWD, cliPath: __dirname, }, userProps: (step.properties || {}) }
+
     if (step.name === "generateEnvFile") {
         runStep({
             scriptName: "generateEnvFile", scriptOrder: i,
-            params: [{ value: application }, { value: environment }, { label: "withOrWithoutLogs", value: true }],
+            params: allContext, //TODO: MISSING WITHLOGS
             successMessage: "env.js generatated successfully", failMessage: "!!! There was an error while generating the envs",
         })
     } else if (step.name === "generateApk") {
         runStep({
             scriptName: "generateApk", scriptOrder: i,
-            params: [{ value: application }, { value: environment }, { value: versionWithDescription, }],
+            params: allContext,
             successMessage: "APKs generated succesfully", failMessage: "!!! There was an error while generating the apks"
         })
     } else if (step.name === "generateApkSizeHistory") {
         runStep({
             scriptName: "generateApkSizeHistory", scriptOrder: i,
-            params: [{ value: application }, { value: environment }, { value: versionWithDescription, }],
+            params: allContext,
             successMessage: "History apk size has been succesfully created", failMessage: "!!! There was an error while writing the  history apk size",
         })
     } else if (step.name === "generateFilesFromTemplates") {
         runStep({
             scriptName: "generateFilesFromTemplates", scriptOrder: i,
-            params: [{ value: application }, { value: environment }, { value: JSON.stringify(step.properties) }],
+            params: allContext,
             successMessage: "Template files have generated the native files accordingly", failMessage: "!!! There was an error while generating the native files from templates",
         })
     } else if (step.name === "generateApkSizeHistory") {
         runStep({
             scriptName: "uploadApk", scriptOrder: i,
-            params: [{ label: "apkFileName:", value: outputFileName }],
+            params: allContext,
             successMessage: "Apk uploaded succesfully to slack channel", failMessage: "Error uploading apk to slack"
         })
     } else {
         //CUSTOM STEPS
         logStep(`${i}. Gonna run custom step named ${step.name}`)
-        step.functionToRun({ application, environment, version, description, outputFileName });
+        step.functionToRun(allContext);
     }
 })
 

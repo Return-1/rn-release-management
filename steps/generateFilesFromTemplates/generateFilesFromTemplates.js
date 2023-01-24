@@ -1,18 +1,21 @@
 const chalk = require('chalk');
 var fs = require('fs');
 //ours
-const config = require(process.env.PWD + '/scripts.config.js')
-var { versionToNumber, isVersionStringValid } = require('../../helpers')
+var { getScriptParamsAsObject, DEFAULTS } = require('../../helpers')
 
-let arguments = [...process.argv]
+const { cliProps: {
+    projectPath
+} } = getScriptParamsAsObject(process.argv)
 
-console.log(arguments)
-process.exit();
+//find all templated files in projectPath
+let templatesToGenerateFrom = []
+//TODO:
 
-let templatesToGenerateFrom = config.templatesToGenerateFrom || [`${process.env.PWD}/aa.text.rnrmtemplate`]
-
+//generate files for these templates
 templatesToGenerateFrom.forEach(templateFilePath => {
     let fileDataAsString = fs.readFileSync(templateFilePath).toString()
-    fileDataAsString.replaceAll("%%SOMETHING%%", "hehe")
-    fs.writeFileSync(relativePathToGradle, newGradleFileDataString)
+
+    //Replace all placeholders with the appropriate thing from the env file
+    fileDataAsString = fileDataAsString.replace(/\%\%SOMETHING\%\%/g, "hehe")
+    fs.writeFileSync(`${projectPath}/${DEFAULTS.apkOutputPath}`, fileDataAsString)
 })

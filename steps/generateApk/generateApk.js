@@ -2,20 +2,26 @@ let { spawnSync } = require('child_process');
 const chalk = require('chalk')
 var fs = require('fs');
 //ours
-var config = require(process.env.PWD + '/scripts.config.js')
-var { isVersionStringValid } = require("../../helpers");
+var { isVersionStringValid, getScriptParamsAsObject, DEFAULTS } = require("../../helpers");
 
-const application = config.allowedApps[process.argv[2]];
-const environment = config.allowedEnvironments[process.argv[3]];
+const { cliProps: {
+    application,
+    environment,
+    version,
+}, userProps: {
+    folderPath: 
+}
+} = getScriptParamsAsObject(process.argv)
+
+//TODO: this will soon go look at readme
 const enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1);
-const version = process.argv[4]
 
 checkIfArchiveFolderExistsElseCreate();
 validateInputs(application, environment, version);
 
 console.log(`generateAndroidApk.sh for ${application} ${enviromentWithCapital} ${version}`);
 
-var proc = spawnSync(`bash`, [__dirname + "/" + `generateApk.sh`, `${application}`, `${environment}`, `${version}`, `${enviromentWithCapital}`], { stdio: 'inherit' })
+var proc = spawnSync(`bash`, [__dirname + "/" + `generateApk.sh`, `${application}`, `${environment}`, `${version}`, `${enviromentWithCapital}`, `${DEFAULTS.apkOutputPath}`], { stdio: 'inherit' })
 
 if (proc.status === 0) {
     console.log(chalk.green("SUCCESS: generateAndroidApk.sh"))
@@ -37,7 +43,7 @@ function validateInputs(application, environment, version) {
 }
 
 function checkIfArchiveFolderExistsElseCreate() {
-    let dir = process.env.PWD + "/IGNORABLES/archiveAPKs"
+    let dir = process.env.PWD + "/" + DEFAULTS.apkOutputPath
     if (!fs.existsSync(dir)) {
         console.log(dir + " doesn't exist. Creating ...")
         fs.mkdirSync(dir, { recursive: true });

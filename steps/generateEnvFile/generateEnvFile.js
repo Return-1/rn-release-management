@@ -2,9 +2,9 @@
 const chalk = require('chalk')
 const fs = require('fs');
 const JavaScriptObfuscator = require('javascript-obfuscator');
+
 //ours
-const { envFileToObject, objectStringToEnvString } = require("../../helpers")
-const config = require(process.env.PWD + '/scripts.config.js')
+const { envFileToObject, objectStringToEnvString, getScriptParamsAsObject, DEFAULTS } = require("../../helpers")
 
 // SYNOPSIS
 //     generateEvns.js [application] [environment] [withOrWithoutLogs]
@@ -14,24 +14,29 @@ const config = require(process.env.PWD + '/scripts.config.js')
 //      and obfuscates the file so that bad hackers are sad.
 
 //PARAMS
-const application = config.allowedApps[process.argv[2]];
-const environment = config.allowedEnvironments[process.argv[3]];
-const withoutLogs = process.argv[4]
-const shouldObfuscate = false;
+
+const { cliProps: {
+    application,
+    environment,
+}, userProps: {
+    withoutLogs = true,
+    shouldObfuscate = false,
+}
+} = getScriptParamsAsObject(process.argv)
 
 let envToCopyFrom;
 if (!application || !environment) {
     console.log(chalk.yellow("WARNING: no application or environment specified. Are you on a server environment? Falling back to env.js"));
-    envToCopyFrom = process.env.PWD + "/src/envs/env.js"
+    envToCopyFrom = `${process.env.PWD}/${DEFAULTS.envFilePath}/env.js`
 } else {
-    envToCopyFrom = `${process.env.PWD}/src/envs/env.${application}.${environment}.js`
+    envToCopyFrom = `${process.env.PWD}/${DEFAULTS.envFilePath}/env.${application}.${environment}.js`
 }
 console.log(`Will use env in ${envToCopyFrom}`)
 
-const pathToCopyTo = `${process.env.PWD}/src/env.js`
+const pathToCopyTo = `${process.env.PWD}/${DEFAULTS.envFilePathOutput}/env.js`
 
 let jsonFromString = envFileToObject(envToCopyFrom);
-if (withoutLogs === "true") {
+if (withoutLogs) {
     console.log("GENERATING WITHOUT LOGS !!!")
     jsonFromString.WITH_LOGS = false
     jsonFromString.WITH_REDUX_LOGGER = false

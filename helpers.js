@@ -48,12 +48,21 @@ function objectStringToEnvString(data) {
     return splitArray.join('\n')
 }
 
+const getScriptParamsAsObject = scriptArgs => {
+    if (scriptArgs && scriptArgs[2]) {
+        let jsonParam = scriptArgs[2];
+        let arguments = JSON.parse(jsonParam)
+        return arguments;
+    }
+    return {}
+}
+
 //STEP RUNNER
 const runStep = ({ scriptName, params, successMessage, failMessage, scriptOrder }) => {
     logStep(`${scriptOrder}. Calling ${scriptName}`)
-    const paramValues = params.map(param => param.value)
-    const scriptDir = __dirname + "/steps/" + scriptName + "/" + scriptName + ".js"
-    var procX = spawnSync("node", [scriptDir, ...paramValues], { stdio: "inherit" })
+    const scriptToExecuteDir = __dirname + "/steps/" + scriptName + "/" + scriptName + ".js"
+
+    var procX = spawnSync("node", [scriptToExecuteDir, JSON.stringify(params)], { stdio: "inherit" })
     if (procX.status !== 0) {
         console.log(chalk.red(failMessage))
         process.exit(1);
@@ -71,11 +80,21 @@ ${'#'.repeat(value ? value.length + 8 : 12)}
 `))
 }
 
+//TODO: Change this to a function like getParam() or something
+//and make sure it also reads the config file so it can be overwritten
+const DEFAULTS = {
+    envFilePath: "src/envs",
+    envFilePathOutput: "src",
+    apkOutputPath: "IGNORABLES/archiveAPKs"
+}
+
 module.exports = {
     isVersionStringValid,
     versionToNumber,
     logStep,
     envFileToObject,
     objectStringToEnvString,
+    getScriptParamsAsObject,
     runStep,
+    DEFAULTS,
 }
