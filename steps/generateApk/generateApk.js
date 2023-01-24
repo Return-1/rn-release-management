@@ -8,10 +8,8 @@ const { cliProps: {
     application,
     environment,
     version,
-}, userProps: {
-    folderPath: 
-}
-} = getScriptParamsAsObject(process.argv)
+    description,
+} } = getScriptParamsAsObject(process.argv)
 
 //TODO: this will soon go look at readme
 const enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1);
@@ -21,7 +19,7 @@ validateInputs(application, environment, version);
 
 console.log(`generateAndroidApk.sh for ${application} ${enviromentWithCapital} ${version}`);
 
-var proc = spawnSync(`bash`, [__dirname + "/" + `generateApk.sh`, `${application}`, `${environment}`, `${version}`, `${enviromentWithCapital}`, `${DEFAULTS.apkOutputPath}`], { stdio: 'inherit' })
+var proc = spawnSync(`bash`, [__dirname + "/" + `generateApk.sh`, `${application}`, `${environment}`, `${version + description}`, `${enviromentWithCapital}`, `${DEFAULTS.apkOutputPath}`], { stdio: 'inherit' })
 
 if (proc.status === 0) {
     console.log(chalk.green("SUCCESS: generateAndroidApk.sh"))

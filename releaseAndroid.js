@@ -62,7 +62,7 @@ config.stepsToRun.forEach((step, i) => {
             params: allContext,
             successMessage: "Template files have generated the native files accordingly", failMessage: "!!! There was an error while generating the native files from templates",
         })
-    } else if (step.name === "generateApkSizeHistory") {
+    } else if (step.name === "uploadApk") {
         runStep({
             scriptName: "uploadApk", scriptOrder: i,
             params: allContext,

@@ -7,7 +7,7 @@
 
 const { spawnSync } = require('child_process');
 const chalk = require('chalk');
-const { DEFAULTS } = require("../../helpers")
+const { getScriptParamsAsObject, DEFAULTS } = require("../../helpers")
 const config = require(process.env.PWD + '/scripts.config.js')
 const apkFileName = process.argv[2];
 
@@ -29,8 +29,8 @@ if (!apkFileName || !slackChannelIds || !slackToken) {
 
 var proc = spawnSync(`bash`, [
     `${__dirname}/uploadApk.sh`,
-    `${config.slackChannelIds.join(",")}`, //ARGUMENT 1 the slack channel
-    `${config.slackToken}`, //ARGUMENT 2 the slack token
+    `${slackChannelIds.join(",")}`, //ARGUMENT 1 the slack channel
+    `${slackToken}`, //ARGUMENT 2 the slack token
     `${filePath}`, //ARGUMENT 3 , the filepath
 ], { stdio: 'inherit' })
 
