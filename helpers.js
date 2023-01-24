@@ -49,8 +49,8 @@ function objectStringToEnvString(data) {
 }
 
 //STEP RUNNER
-const runStep = ({ scriptName, params, successMessage, failMessage }) => {
-    logStep(`Calling ${scriptName}`)
+const runStep = ({ scriptName, params, successMessage, failMessage, scriptOrder }) => {
+    logStep(`${scriptOrder}. Calling ${scriptName}`)
     const paramValues = params.map(param => param.value)
     const scriptDir = __dirname + "/steps/" + scriptName + "/" + scriptName + ".js"
     var procX = spawnSync("node", [scriptDir, ...paramValues], { stdio: "inherit" })

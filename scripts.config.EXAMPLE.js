@@ -10,13 +10,17 @@ const allowedEnvironments = {
     production: "production",
 }
 
-const enviromentTranslations = {
-    staging: "staging",
-    production: "production",
+const slackToken = "some_token";
+const slackChannelIds = "x,y,z"
+
+const functionToRun = () => {
+    console.log("test function provided by user", process.env.PWD)
 }
 
 module.exports = {
     allowedEnvironments,
     allowedApps,
-    enviromentTranslations,
+    slackToken,
+    slackChannelIds,
+    functionToRun,
 }

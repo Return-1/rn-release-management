@@ -7,16 +7,15 @@ var { isVersionStringValid } = require("../../helpers");
 
 const application = config.allowedApps[process.argv[2]];
 const environment = config.allowedEnvironments[process.argv[3]];
-const enviromentForApk = config.enviromentTranslations[environment]
-const enviromentWithCapital = enviromentForApk[0].toUpperCase() + enviromentForApk.substring(1);
+const enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1);
 const version = process.argv[4]
 
 checkIfArchiveFolderExistsElseCreate();
-validateInputs(application, enviromentForApk, version);
+validateInputs(application, environment, version);
 
 console.log(`generateAndroidApk.sh for ${application} ${enviromentWithCapital} ${version}`);
 
-var proc = spawnSync(`bash`, [__dirname + "/" + `generateApk.sh`, `${application}`, `${enviromentForApk}`, `${version}`, `${enviromentWithCapital}`], { stdio: 'inherit' })
+var proc = spawnSync(`bash`, [__dirname + "/" + `generateApk.sh`, `${application}`, `${environment}`, `${version}`, `${enviromentWithCapital}`], { stdio: 'inherit' })
 
 if (proc.status === 0) {
     console.log(chalk.green("SUCCESS: generateAndroidApk.sh"))

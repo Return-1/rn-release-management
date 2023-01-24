@@ -31,6 +31,7 @@ export default envData
 
 # Future work :
 
+- Be able to reorder/disable steps from config js
 - Make it work even without flavors. Prompt if no flavor/environment combo is provided with info
 saying it is suggested to do so
 - a way for you to define your own tasks for building
@@ -41,3 +42,4 @@ saying it is suggested to do so
 - uploading apk using ssh somewhere?
 - make the IGNORABLES/archiveAPKs folder configurable in scripts.config.EXAMPLE.js
 - should make envData be allowed to add comments on first line etc and parse it better
+- Is there really any reason to have the envs be env.flavorName.envName.js instead of going for the complete final variant like say <appName><envName>.env.js? This would help the code not need the capitalize function

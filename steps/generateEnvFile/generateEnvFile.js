@@ -1,10 +1,10 @@
 
-var chalk = require('chalk')
-var fs = require('fs');
-var JavaScriptObfuscator = require('javascript-obfuscator');
+const chalk = require('chalk')
+const fs = require('fs');
+const JavaScriptObfuscator = require('javascript-obfuscator');
 //ours
-var { envFileToObject, objectStringToEnvString } = require("../../helpers")
-var config = require(process.env.PWD + '/scripts.config.js')
+const { envFileToObject, objectStringToEnvString } = require("../../helpers")
+const config = require(process.env.PWD + '/scripts.config.js')
 
 // SYNOPSIS
 //     generateEvns.js [application] [environment] [withOrWithoutLogs]

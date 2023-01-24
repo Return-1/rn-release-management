@@ -6,8 +6,7 @@ const config = require(process.env.PWD + '/scripts.config.js')
 const version = process.argv[4]
 const application = config.allowedApps[process.argv[2]]
 const environment = config.allowedEnvironments[process.argv[3]]
-const enviromentForApk = config.enviromentTranslations[environment]
-const enviromentWithCapital = enviromentForApk[0].toUpperCase() + enviromentForApk.substring(1)
+const enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1)
 
 let loggerFile;
 const d = new Date();
@@ -37,13 +36,13 @@ const createHistory = () => {
         const records = data.toString().split('\n')
         if (err) console.log(chalk.red(`something went wrong: ${err}`))
         if (records.length === 1) {
-            history = `${dateTime} | ${currentApkSize} MB | ${application} | ${enviromentForApk} | ${version} | ${currentApkSize}\n`
+            history = `${dateTime} | ${currentApkSize} MB | ${application} | ${environment} | ${version} | ${currentApkSize}\n`
         } else {
             const lastLine = records[records.length - 2]
             const lastApkSize = getRecordApkSize(lastLine)
             const differntSize = (currentApkSize - lastApkSize).toFixed(2)
             handleMessages(differntSize)
-            history = `${dateTime} | ${currentApkSize} MB | ${application} | ${enviromentForApk} | ${version} | ${differntSize}\n`
+            history = `${dateTime} | ${currentApkSize} MB | ${application} | ${environment} | ${version} | ${differntSize}\n`
         }
         fs.writeFile(loggerFile, history, { flag: 'a', encoding: 'utf8' }, (err) => {
             if (err) console.log(chalk.red(`something went wrong: ${err}`))
