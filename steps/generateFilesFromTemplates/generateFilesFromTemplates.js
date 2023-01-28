@@ -4,23 +4,40 @@ const { spawnSync } = require('child_process');
 //ours
 var { getScriptParamsAsObject, DEFAULTS, envFileToObject } = require('../../helpers')
 
+
+// SCRIPT DESCRIPTION. IT DOES TWO THINGS
+// 1. WILL WORK ON FILES PROVIDED, FILES HAVE FORMAT AS IN SEE generateFilesFromTemplates API
+// 2. (OPTIONAL) WILL ALSO AUTODETECT TEMPLATES AND REPLACE WITH ENV VARIABLES IN ENV.JS FILE IF AUTODETECT
+// IS ENABLED 
+
 const { cliProps: {
     projectPath
 }, userProps: {
-    files,
-    autodetect,
+    files = [], //the list of files to work on 
+    injectedChangeData = {}, //change data to include, basically merge with envData
+    autodetect = true,
 } } = getScriptParamsAsObject(process.argv)
 
 const envData = envFileToObject(`${process.env.PWD}/${DEFAULTS.envFilePathOutput}/env.js`);
+const finalChangeData = { ...envData, ...injectedChangeData }
 
-//autodetect
-autodetectTemplatesAndAddChangeData(envData)
-process.exit();
+let listOfFiles = files;
 
-//generate files for these templates
-generateFilesFromTemplates(files)
+//1. autodetect
+if (autodetect) {
+    let autodetectedFiles = autodetectTemplatesAndAddChangeData(finalChangeData)
+    // console.log(autodetectedFiles)
+    //TODO: IF FILE PATH EXISTS IN files, ignore in autodetect
+    listOfFiles = [...autodetectedFiles, ...files,]
+    console.log(console.log(JSON.stringify(listOfFiles, null, 4)))
+}
 
+//2. generate files for these templates
+generateFilesFromTemplates(listOfFiles)
+
+///////////
 //FUNCTIONS
+//////////
 function autodetectTemplatesAndAddChangeData(changeDataInput) {
 
     //autodetect file paths in ${projectPath}
@@ -34,8 +51,7 @@ function autodetectTemplatesAndAddChangeData(changeDataInput) {
         // { key1: value1 }. This example
         // Will change all %%key1%% items on templates with value value1
         let changeData = Object.keys(changeDataInput).map(envFieldKey => {
-            console.log(envFieldKey)
-            return { stringToReplace: "%%" + envFieldKey + "%%", replaceWith: envData[envFieldKey] }
+            return { stringToReplace: "%%" + envFieldKey + "%%", replaceWith: changeDataInput[envFieldKey] }
         })
 
         return {
@@ -43,8 +59,6 @@ function autodetectTemplatesAndAddChangeData(changeDataInput) {
             changeData
         }
     })
-
-    console.log(JSON.stringify(autodetectedFilePathsWithChangeData, null, 4))
     return autodetectedFilePathsWithChangeData;
 }
 
@@ -65,6 +79,10 @@ function generateFilesFromTemplates(filepathsWithChangeData) {
     //         ]
     //     }
     // },
+    //
+    //Data provided like this will override any data found in env files or 
+    //injectedChangeData provided. This is more specific and as such receives
+    //top priority
 
     filepathsWithChangeData.forEach(item => {
 
@@ -75,7 +93,6 @@ function generateFilesFromTemplates(filepathsWithChangeData) {
             let text = changeData.stringToReplace;
             text = text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
             let regex = new RegExp(text, 'g')
-            console.log(regex)
             fileDataAsString = fileDataAsString.replace(regex, changeData.replaceWith)
         })
 

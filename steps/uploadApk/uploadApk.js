@@ -8,7 +8,6 @@
 const { spawnSync } = require('child_process');
 const chalk = require('chalk');
 const { getScriptParamsAsObject, DEFAULTS } = require("../../helpers")
-const config = require(process.env.PWD + '/scripts.config.js')
 const apkFileName = process.argv[2];
 
 const { cliProps: {
@@ -23,7 +22,7 @@ const filePath = process.env.PWD + "/" + DEFAULTS.apkOutputPath + "/" + outputFi
 console.log("upload to slack script will find file in", filePath)
 
 if (!apkFileName || !slackChannelIds || !slackToken) {
-    console.log("Missing filename or slackChannel/slackToken. Have you specified those in the scripts.config.js file?")
+    console.log("Missing filename or slackChannel/slackToken. Have you specified those?")
     process.exit(1);
 }
 

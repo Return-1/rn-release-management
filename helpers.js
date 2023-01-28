@@ -11,6 +11,13 @@ const isVersionStringValid = (version) => {
     return true;
 }
 
+function checkIfArchiveFolderExistsElseCreate(dir) {
+    if (!fs.existsSync(dir)) {
+        console.log(dir + " doesn't exist. Creating ...")
+        fs.mkdirSync(dir, { recursive: true });
+    }
+}
+
 //TODO: THIS ALSO EXISTS IN GENERAL. IS IT OK TO IMPORT FRM THERE?
 const versionToNumber = (val) => {
     return parseInt(val.replace(/[.]/g, ""))
@@ -66,8 +73,9 @@ const runStep = ({ scriptName, params, successMessage, failMessage, scriptOrder 
     if (procX.status !== 0) {
         console.log(chalk.red(failMessage))
         process.exit(1);
+    } else {
+        console.log(chalk.green(successMessage))
     }
-    console.log(chalk.green(successMessage))
 }
 
 //SIMPLY DISPLAY
@@ -96,5 +104,6 @@ module.exports = {
     objectStringToEnvString,
     getScriptParamsAsObject,
     runStep,
+    checkIfArchiveFolderExistsElseCreate,
     DEFAULTS,
 }

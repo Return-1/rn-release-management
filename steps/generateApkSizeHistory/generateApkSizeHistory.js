@@ -56,9 +56,9 @@ const createHistory = () => {
     });
 }
 
-if (application === 'collaborateDoctor') {
-    loggerFile = `${appDirectory}/collaborateDoctor-size.log`
-} else loggerFile = `${appDirectory}/collaboratePatient-size.log`
+
+
+loggerFile = `${appDirectory}/${application}-size.log`
 
 if (fs.existsSync(loggerFile)) {
     createHistory()

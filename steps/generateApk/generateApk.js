@@ -1,8 +1,8 @@
 let { spawnSync } = require('child_process');
 const chalk = require('chalk')
-var fs = require('fs');
+
 //ours
-var { isVersionStringValid, getScriptParamsAsObject, DEFAULTS } = require("../../helpers");
+var { isVersionStringValid, getScriptParamsAsObject, checkIfArchiveFolderExistsElseCreate, DEFAULTS } = require("../../helpers");
 
 const { cliProps: {
     application,
@@ -14,7 +14,7 @@ const { cliProps: {
 //TODO: this will soon go look at readme
 const enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1);
 
-checkIfArchiveFolderExistsElseCreate();
+checkIfArchiveFolderExistsElseCreate(process.env.PWD + "/" + DEFAULTS.apkOutputPath);
 validateInputs(application, environment, version);
 
 console.log(`generateAndroidApk.sh for ${application} ${enviromentWithCapital} ${version}`);
@@ -37,13 +37,5 @@ function validateInputs(application, environment, version) {
     if (!isVersionStringValid(version)) {
         console.error(chalk.red(`Version ${version} provided invalid.`));
         process.exit(1);
-    }
-}
-
-function checkIfArchiveFolderExistsElseCreate() {
-    let dir = process.env.PWD + "/" + DEFAULTS.apkOutputPath
-    if (!fs.existsSync(dir)) {
-        console.log(dir + " doesn't exist. Creating ...")
-        fs.mkdirSync(dir, { recursive: true });
     }
 }

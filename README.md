@@ -12,9 +12,12 @@
 
 # Assumptions to use rn-release-management
 
-### You've got set up Flavors
+### You've got set up Flavors on Android
 You have setup flavors on android/app/build.gradle file that look like
 <appName><appEnvironment(staging|production|whatever)>
+
+# Setting Up
+run `releaseAndroid.js --init`
 
 ### Env files
 You have set up an /envs folder that lives in /src/envs and the files look like
@@ -31,16 +34,16 @@ export default envData
 
 # Future work :
 
-- Be able to reorder/disable steps from config js
+High prio:
+
+- Make steps work like imported functions instead of adding a steps config file.
 - Make it work even without flavors. Prompt if no flavor/environment combo is provided with info
 saying it is suggested to do so
-- a way for you to define your own tasks for building
-- even better env management by utilizing templates to generate native file management
-- autoincrementing versions
+
+Low prio/later:
 - building on iOS
-- uploading apk to slack
-- uploading apk using ssh somewhere?
-- make the IGNORABLES/archiveAPKs folder configurable in scripts.config.EXAMPLE.js
+- STEP: uploading apk ssh
+- DEFAULTS should be overrideable in scripts.config.js
 - should make envData be allowed to add comments on first line etc and parse it better
 - Is there really any reason to have the envs be env.flavorName.envName.js instead of going for the complete final variant like say <appName><envName>.env.js? This would help the code not need the capitalize function
 - generate apk size history default and overrideable log output location

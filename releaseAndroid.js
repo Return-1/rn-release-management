@@ -2,8 +2,9 @@
 
 const chalk = require('chalk');
 const program = require("commander")
+const fs = require('fs');
 //ours
-const { runStep, logStep } = require('./helpers')
+const { runStep, logStep, checkIfArchiveFolderExistsElseCreate } = require('./helpers')
 const config = require(process.env.PWD + '/scripts.config.js')
 
 // SYNOPSIS
@@ -19,11 +20,24 @@ program
     .option('-d --desc <string>', "extra description for this version ")
 
 program.parse(process.argv)
-const application = config.allowedApps[process.argv[2]];
-const environment = config.allowedEnvironments[process.argv[3]];
+const application = process.argv[2];
+//TODO: MOVE TO A DIFFERENT FILE
+//WIP WIP WIP WIP
+//    WIP WIP
+//WIP WIP WIP WIP
+if (application === "init") {
+    //WIP WIP
+    checkIfArchiveFolderExistsElseCreate(process.env.PWD + "/rnrm-config")
+    fs.writeFileSync("rnrm-config/versioning.js", "const versioning = {}")
+    process.exit(0)
+}
+const environment = process.argv[3];
 const version = process.argv[4] || ""
 const description = program.desc || ""
+//todo: look at readme can prolly do away with this
 const outputFileName = application + environment[0].toUpperCase() + environment.substring(1) + version + description + ".apk"
+
+
 
 //TODO: This should be same as in generateApk.js or generic enough
 if (!application || !environment || !version) {
