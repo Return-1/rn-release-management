@@ -1,41 +1,22 @@
 const { getContext } = require("./steps/getContext/getContext")
-const { runStep } = require('./helpers')
+const { runStep, wrapWithContext } = require('./helpers')
+
+const wrapInRunStep = (scriptName, successMessageOverride, errorMessageOverride) => {
+    return context => runStep({
+        scriptName: scriptName,
+        params: context, //TODO: MISSING WITHLOGS
+        successMessage: `${scriptName} executed succefully`, failMessage: `!!!! ${scriptName} step failed !!!!!!!`,
+    })
+}
 
 module.exports = {
     getContext,
-    generateEnvFile: (context) => {
-        runStep({
-            scriptName: "generateEnvFile",
-            params: context, //TODO: MISSING WITHLOGS
-            successMessage: "env.js generatated successfully", failMessage: "!!! There was an error while generating the envs",
-        })
-    },
-    generateApk: (context) => {
-        runStep({
-            scriptName: "generateApk",
-            params: context,
-            successMessage: "APKs generated succesfully", failMessage: "!!! There was an error while generating the apks"
-        })
-    },
-    generateApkSizeHistory: (context) => {
-        runStep({
-            scriptName: "generateApkSizeHistory",
-            params: context,
-            successMessage: "History apk size has been succesfully created", failMessage: "!!! There was an error while writing the  history apk size",
-        })
-    },
-    generateFilesFromTemplates: (context) => {
-        runStep({
-            scriptName: "generateFilesFromTemplates",
-            params: context,
-            successMessage: "Template files have generated the native files accordingly", failMessage: "!!! There was an error while generating the native files from templates",
-        })
-    },
-    uploadApk: (context) => {
-        runStep({
-            scriptName: "uploadApk",
-            params: context,
-            successMessage: "Apk uploaded succesfully to slack channel", failMessage: "Error uploading apk to slack"
-        })
-    },
+    generateEnvFile: wrapInRunStep("generateEnvFile"),
+    generateApk: wrapInRunStep("generateApk"),
+    generateApkSizeHistory: wrapInRunStep("generateApkSizeHistory"),
+    generateFilesFromTemplates: wrapInRunStep("generateFilesFromTemplates"),
+    tagBranch: wrapInRunStep("tagBranch"),
+    uploadApk: wrapInRunStep("uploadApk"),
+    //helpers,
+    wrapWithContext,
 }

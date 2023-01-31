@@ -12,8 +12,7 @@ const getContext = (process) => {
     if (program.desc) { console.log(`Description: ${program.desc}`) }
 
     const allContext = { cliProps: { application, environment, version, description, outputFileName, projectPath: process.env.PWD, cliPath: __dirname, }, userProps: {} }
-    console.log(allContext);
-    process.exit();
+    // console.log(allContext);
     return allContext;
 }
 

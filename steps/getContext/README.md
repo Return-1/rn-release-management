@@ -1,7 +1,6 @@
 ### Instructions
 
-
-Upon running a command like
+Upon running a command like :
 `node rnrm/run.js flavor1 production 1.2.0 -d "_some_description`
 
 getContext will return an object that will look like:
@@ -14,8 +13,8 @@ getContext will return an object that will look like:
     version: '1.2.0',
     description: '',
     outputFileName: 'flavor1Production1.2.0.apk',
-    projectPath: '/Users/georgeavgoustis/Desktop/PROJECTS/OTHER/HLDataMobile',
-    cliPath: '/Users/georgeavgoustis/Desktop/PROJECTS/OTHER/rn-release-management/steps/getContext'
+    projectPath: '/Users/.../YOUR_PROJECT',
+    cliPath: '/Users/../rn-release-management/steps/getContext' ????IS THIR RIGHT?
   },
   userProps: {}
 }

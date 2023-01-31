@@ -6,15 +6,6 @@ const JavaScriptObfuscator = require('javascript-obfuscator');
 //ours
 const { envFileToObject, objectStringToEnvString, getScriptParamsAsObject, DEFAULTS } = require("../../helpers")
 
-// SYNOPSIS
-//     generateEvns.js [application] [environment] [withOrWithoutLogs]
-
-// DESCRIPTION
-//      This cli utility copies the appropriate .env.application.environment.js into env.js
-//      and obfuscates the file so that bad hackers are sad.
-
-//PARAMS
-
 const { cliProps: {
     application,
     environment,
@@ -37,7 +28,7 @@ const pathToCopyTo = `${process.env.PWD}/${DEFAULTS.envFilePathOutput}/env.js`
 
 let jsonFromString = envFileToObject(envToCopyFrom);
 if (withoutLogs) {
-    console.log("GENERATING WITHOUT LOGS !!!")
+    console.log("GENERATING WITHOUT LOGS")
     jsonFromString.WITH_LOGS = false
     jsonFromString.WITH_REDUX_LOGGER = false
 }
@@ -70,7 +61,6 @@ if (shouldObfuscate) {
     obfuscationResult = stringToObfuscate;
 }
 
-console.log(`---Copying env ${envToCopyFrom} to ${pathToCopyTo}`)
-
+console.log(`---Copying env:${envToCopyFrom}\nto\n${pathToCopyTo}`)
 fs.writeFileSync(pathToCopyTo, obfuscationResult.toString());
 console.log(chalk.green("Done generating env.js"))

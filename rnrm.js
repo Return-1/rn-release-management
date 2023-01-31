@@ -16,8 +16,6 @@ if (command === "init") {
 
     //TODO: Provide it with a list of flavors so it can gene
     let dir = process.env.PWD;
-    let templateExecFile = fs.readFileSync(`${__dirname}/templates/run-template.js`).toString()
-    let templateVersioningFile = fs.readFileSync(`${__dirname}/templates/versioning-template.js`).toString()
 
     let { exists } = checkIfArchiveFolderExistsElseCreate(`${dir}/rnrm`)
     if (exists) {
@@ -37,7 +35,9 @@ if (command === "init") {
         }
 
         console.log("Very well. Creating flavors")
-        fs.writeFileSync(`${dir}/rnrm/run.js`, templateExecFile)
+
+        let templateExecFile = fs.readFileSync(`${__dirname}/templates/releaseAndroid-template.js`).toString()
+        fs.writeFileSync(`${dir}/rnrm/releaseAndroid.js`, templateExecFile)
 
         const versioningFileStringData = createVersioningFileData(flavorsArr)
         fs.writeFileSync(`${dir}/rnrm/versioning.js`, versioningFileStringData)
@@ -49,7 +49,7 @@ function createVersioningFileData(flavorsArr) {
     let stringData = "module.exports = {\n";
 
     flavorsArr.forEach(flavor => {
-        stringData += `\t${flavor}MarketingVersion:"1.0.0",\n\t${flavor}CurrentVersion:0,\n`
+        stringData += `//${flavor.toUpperCase()}\n\t${flavor}MarketingVersion:"1.0.0",\n\t${flavor}CurrentVersion:0,\n`
     })
     stringData += "}"
     console.log(stringData)

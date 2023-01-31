@@ -91,6 +91,19 @@ ${'#'.repeat(value ? value.length + 8 : 12)}
 `))
 }
 
+//TODO: Make sure this is needed. Warning untested code
+function wrapWithContext(funcArr, context) {
+    return funcArr.map(func => {
+        return function () {
+            func({
+                ...context, userProps: {
+                    ...arguments
+                }
+            })
+        }
+    })
+}
+
 //TODO: Change this to a function like getParam() or something
 //and make sure it also reads the config file so it can be overwritten
 const DEFAULTS = {
@@ -108,5 +121,6 @@ module.exports = {
     getScriptParamsAsObject,
     runStep,
     checkIfArchiveFolderExistsElseCreate,
+    wrapWithContext,
     DEFAULTS,
 }

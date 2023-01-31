@@ -4,12 +4,6 @@ const { spawnSync } = require('child_process');
 //ours
 var { getScriptParamsAsObject, DEFAULTS, envFileToObject } = require('../../helpers')
 
-
-// SCRIPT DESCRIPTION. IT DOES TWO THINGS
-// 1. WILL WORK ON FILES PROVIDED, FILES HAVE FORMAT AS IN SEE generateFilesFromTemplates API
-// 2. (OPTIONAL) WILL ALSO AUTODETECT TEMPLATES AND REPLACE WITH ENV VARIABLES IN ENV.JS FILE IF AUTODETECT
-// IS ENABLED 
-
 const { cliProps: {
     projectPath
 }, userProps: {

@@ -1,15 +1,17 @@
 const {
     getContext,
+    //actions
     generateEnvFile,
     generateFilesFromTemplates,
     generateApk,
     generateApkSizeHistory,
     uploadApk,
+    tagBranch,
 } = require("rn-release-management")
 const versioning = require("./versioning")
-
 let context = getContext(process);
 
+//Environment setup
 generateEnvFile(context);
 generateFilesFromTemplates({
     ...context, userProps: {
@@ -22,6 +24,8 @@ generateFilesFromTemplates({
         },
     }
 });
+
+//APK generation, uploading and tagging. Usually on release candidate
 generateApk(context)
 generateApkSizeHistory(context)
 uploadApk({
@@ -33,3 +37,4 @@ uploadApk({
         ]
     }
 })
+tagBranch(context);
