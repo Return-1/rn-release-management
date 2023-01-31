@@ -15,6 +15,9 @@ function checkIfArchiveFolderExistsElseCreate(dir) {
     if (!fs.existsSync(dir)) {
         console.log(dir + " doesn't exist. Creating ...")
         fs.mkdirSync(dir, { recursive: true });
+        return { exists: false }
+    } else {
+        return { exists: true }
     }
 }
 
@@ -65,7 +68,7 @@ const getScriptParamsAsObject = scriptArgs => {
 }
 
 //STEP RUNNER
-const runStep = ({ scriptName, params, successMessage, failMessage, scriptOrder }) => {
+const runStep = ({ scriptName, params, successMessage = "", failMessage = "", scriptOrder = "" }) => {
     logStep(`${scriptOrder}. Calling ${scriptName}`)
     const scriptToExecuteDir = __dirname + "/steps/" + scriptName + "/" + scriptName + ".js"
 

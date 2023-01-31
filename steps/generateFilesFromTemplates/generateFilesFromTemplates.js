@@ -29,7 +29,6 @@ if (autodetect) {
     // console.log(autodetectedFiles)
     //TODO: IF FILE PATH EXISTS IN files, ignore in autodetect
     listOfFiles = [...autodetectedFiles, ...files,]
-    console.log(console.log(JSON.stringify(listOfFiles, null, 4)))
 }
 
 //2. generate files for these templates

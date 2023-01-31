@@ -1,5 +1,7 @@
 # What this tool provides for you
 
+A set of conventions and predefined functions to automate the management of your Android and iOS releases and env management. Particularly useful if you're using flavors.
+
 **Android:**
 - building the proper flavor/environment combination on Android
 - managing envs so don't need to worry if your build variant has the right env file included
@@ -34,16 +36,15 @@ export default envData
 
 # Future work :
 
-High prio:
+### High prio
+1. Currently there's this issue where version provided by the cli is not respected, it's only used as a description, so find a way to unify that and see if it should be the versioning.js file that should be respected/incremented or not.
 
-- Make steps work like imported functions instead of adding a steps config file.
-- Make it work even without flavors. Prompt if no flavor/environment combo is provided with info
-saying it is suggested to do so
+2. Make it work even without flavors. Prompt if no flavor/environment combo is provided with info saying it is suggested to do so
 
-Low prio/later:
-- building on iOS
-- STEP: uploading apk ssh
-- DEFAULTS should be overrideable in scripts.config.js
-- should make envData be allowed to add comments on first line etc and parse it better
-- Is there really any reason to have the envs be env.flavorName.envName.js instead of going for the complete final variant like say <appName><envName>.env.js? This would help the code not need the capitalize function
-- generate apk size history default and overrideable log output location
+### Low prio/later:
+-3 building on iOS
+-4STEP: uploading apk ssh
+-5 DEFAULTS should be overrideable in scripts.config.js
+-6 should make envData be allowed to add comments on first line etc and parse it better
+-7 Is there really any reason to have the envs be env.flavorName.envName.js instead of going for the complete final variant like say <appName><envName>.env.js? This would help the code not need the capitalize function
+-8 generate apk size history default and overrideable log output location

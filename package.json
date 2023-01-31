@@ -2,19 +2,19 @@
   "name": "rn-release-management",
   "version": "1.0.0",
   "description": "So we can more easily release react native",
-  "main": "releaseAndroid.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo test"
   },
   "author": "George Avgoustis",
   "license": "ISC",
   "bin": {
-    "releaseAndroid": "releaseAndroid.js",
-    "generateEnv": "generateEnv.js"
+    "rnrm": "rnrm.js"
   },
   "dependencies": {
-    "javascript-obfuscator": "^1.3.0",
     "chalk": "^3.0.0",
-    "loose-json": "^1.1.2"
+    "javascript-obfuscator": "^1.3.0",
+    "loose-json": "^1.1.2",
+    "readline-sync": "^1.4.10"
   }
 }

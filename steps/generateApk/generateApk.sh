@@ -6,7 +6,7 @@ enviromentWithCapital=$4
 apkOutputPath=$5
 
 versionName=$app$enviromentWithCapital$version
-echo -e "in sh file !!"
+echo -e "in generate apk sh file !! version name: "$versionName
 pwd
 cd ./android
 pwd

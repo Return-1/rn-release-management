@@ -1,14 +1,6 @@
-// SYNOPSIS
-//     releaseSourceMaps.js [slackChannel] [apk] 
-
-// DESCRIPTION
-//      This cli utiliti posts the apk on apropriate slack channel
-
-
 const { spawnSync } = require('child_process');
 const chalk = require('chalk');
 const { getScriptParamsAsObject, DEFAULTS } = require("../../helpers")
-const apkFileName = process.argv[2];
 
 const { cliProps: {
     outputFileName
@@ -17,11 +9,11 @@ const { cliProps: {
     slackToken,
 } } = getScriptParamsAsObject(process.argv)
 
-console.log("in uploadApk.js")
+console.log("In uploadApk.js")
 const filePath = process.env.PWD + "/" + DEFAULTS.apkOutputPath + "/" + outputFileName
-console.log("upload to slack script will find file in", filePath)
+console.log("upload to slack script will find file in:\n", filePath)
 
-if (!apkFileName || !slackChannelIds || !slackToken) {
+if (!slackChannelIds || !slackToken) {
     console.log("Missing filename or slackChannel/slackToken. Have you specified those?")
     process.exit(1);
 }
