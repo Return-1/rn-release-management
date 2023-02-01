@@ -41,6 +41,8 @@ export default envData
 
 2. Make it work even without flavors. Prompt if no flavor/environment combo is provided with info saying it is suggested to do so
 
+3. Save a list of commits in the device all that have a prefix of COMPANYNAMEDEVL_xxxx where xxxx is the number
+
 ### Low prio/later:
 -3 building on iOS
 -4STEP: uploading apk ssh

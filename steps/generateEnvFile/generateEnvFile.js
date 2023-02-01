@@ -10,7 +10,7 @@ const { cliProps: {
     application,
     environment,
 }, userProps: {
-    withoutLogs = true,
+    withoutLogs,
     shouldObfuscate = false,
 }
 } = getScriptParamsAsObject(process.argv)
@@ -27,11 +27,12 @@ console.log(`Will use env in ${envToCopyFrom}`)
 const pathToCopyTo = `${process.env.PWD}/${DEFAULTS.envFilePathOutput}/env.js`
 
 let jsonFromString = envFileToObject(envToCopyFrom);
-if (withoutLogs) {
-    console.log("GENERATING WITHOUT LOGS")
-    jsonFromString.WITH_LOGS = false
-    jsonFromString.WITH_REDUX_LOGGER = false
+
+if (withoutLogs === true || withoutLogs === false) {
+    jsonFromString.WITH_LOGS = !withoutLogs
+    jsonFromString.WITH_REDUX_LOGGER = !withoutLogs
 }
+
 let stringToJSON = JSON.stringify(jsonFromString, null, "\t")
 let stringToObfuscate = objectStringToEnvString(stringToJSON)
     .replace(/\n\s*"/g, "\n")
