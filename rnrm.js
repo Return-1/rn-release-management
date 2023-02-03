@@ -36,8 +36,11 @@ if (command === "init") {
 
         console.log("Very well. Creating flavors")
 
-        let templateExecFile = fs.readFileSync(`${__dirname}/templates/releaseAndroid-template.js`).toString()
-        fs.writeFileSync(`${dir}/rnrm/releaseAndroid.js`, templateExecFile)
+        let templateReleaseAndroid = fs.readFileSync(`${__dirname}/templates/releaseAndroid-template.js`).toString()
+        fs.writeFileSync(`${dir}/rnrm/releaseAndroid.js`, templateReleaseAndroid)
+
+        let templateChangeEnvironment = fs.readFileSync(`${__dirname}/templates/changeEnvironment-template.js`).toString()
+        fs.writeFileSync(`${dir}/rnrm/changeEnvironment.js`, templateChangeEnvironment)
 
         const versioningFileStringData = createVersioningFileData(flavorsArr)
         fs.writeFileSync(`${dir}/rnrm/versioning.js`, versioningFileStringData)

@@ -1,38 +1,71 @@
 # What this tool provides for you
 
-A set of conventions and predefined functions to automate the management of your Android and iOS releases and env management. Particularly useful if you're using flavors.
+This cli tool provides you with a series of useful steps that can be run to automate your mobile releases and manage your environment variables in one place. Flavor friendly.
 
-**Android:**
-- building the proper flavor/environment combination on Android
+Current features:
+
+**Both platforms (ios,android):**
 - managing envs so don't need to worry if your build variant has the right env file included
-- logging history of apk size per build variant and diffing apk size
-- storing all your apks on a folder so you've got some apk history
-- other ( WIP to write )
+- using env files to make sure your native files are properly configured (e.g plists)
+- tag branch on build
 
-**iOS:**
-- By using the generateEnv.js file you can also make sure your iOS scheme/target variants will always build with the proper .env file
+**Android only:**
+- building the proper flavor/environment combination on Android (apk only soon aab)
+- Keeping a log of how your apk size changes per build so bloat doesn't sneak up on you
+- Storing all your binaries (apks,aabs) in a folder so you've got access to them
+- Upload your apk to a slack channel
 
-# Assumptions to use rn-release-management
-
-### You've got set up Flavors on Android
-You have setup flavors on android/app/build.gradle file that look like
-<appName><appEnvironment(staging|production|whatever)>
-
-# Setting Up
-run `releaseAndroid.js --init`
-
+# Setting up
 ### Env files
-You have set up an /envs folder that lives in /src/envs and the files look like
+
+A core concern of this library is making sure that you only need to set your env variables in one place and need not concern yourself with making sure your native files ( such as plist files ) or your build flavor have included the right environment. In your .js files, all you need to do is import a main env.js file from src/env.js and this library will make sure that file's contents are as needed.
+
+You have set up an /envs folder that lives in /src/envs and the env filenames look like
 env.<appName><appEnvironment>
 
-The files are supposed to look like :
-
-```
+The env file contents are expected to look like :
+```js
 const envData = {
-    key1: asdad //whatever
+    key1: asdad, //whatever
 }
 export default envData
 ```
+
+### Flavors
+
+We're currently making the assumption that you've got set up flavors on Android
+You have setup flavors on android/app/build.gradle file that look like
+[appName][appEnvironment(e.g staging|production|whatever)]
+
+### Initializing
+
+Run `rnrm.js --init` and this will create some files needed from this library to operate.
+
+# Recipes
+Currently by default `/rnrm` contains two recipies ( which is nothing more than a series of commonly used steps for changing the environment or building and distributing your android app privately)
+
+### I wanna change my environment
+`node rnrm/changeEnvironment.js flavorName environment` 
+
+`node rnrm/releaseAndroid.js flavorName environment x.x.x "some description"`
+
+### Available Steps to make your own recipe
+
+You can see the documentation of each individual step in the `/steps` folder
+
+`getContext`
+
+`generateEnvFile`
+
+`generateFilesFromTemplates`
+
+`generateApk`
+
+`generateApkSizeHistory`
+
+`uploadApk`
+
+`tagBranch`
 
 # Future work :
 
