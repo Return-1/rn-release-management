@@ -13,7 +13,8 @@ const { cliProps: {
 } } = getScriptParamsAsObject(process.argv)
 
 const envData = envFileToObject(`${process.env.PWD}/${DEFAULTS.envFilePathOutput}/env.js`);
-const finalChangeData = { ...envData, ...injectedChangeData }
+const rnrmConfigData = envFileToObject(`${process.env.PWD}/rnrm/config.js`);
+const finalChangeData = { ...rnrmConfigData, ...envData, ...injectedChangeData }
 
 let listOfFiles = files;
 

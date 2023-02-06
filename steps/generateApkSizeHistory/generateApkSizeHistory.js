@@ -6,13 +6,18 @@ const { cliProps: {
     application,
     environment,
     version,
+    projectPath,
 }, userProps: {
 
 }
 } = getScriptParamsAsObject(process.argv)
 
 //TODO: This will soon go check readme
-const enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1)
+//TODO: this will soon go look at readme
+let enviromentWithCapital = "";
+if (environment) {
+    enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1);
+}
 
 let loggerFile;
 const d = new Date();
@@ -56,9 +61,7 @@ const createHistory = () => {
     });
 }
 
-
-
-loggerFile = `${appDirectory}/${application}-size.log`
+loggerFile = `${projectPath}/rnrm/apkSizeHistory/${application}-size.log`
 
 if (fs.existsSync(loggerFile)) {
     createHistory()

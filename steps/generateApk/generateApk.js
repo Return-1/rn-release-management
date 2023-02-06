@@ -12,7 +12,10 @@ const { cliProps: {
 } } = getScriptParamsAsObject(process.argv)
 
 //TODO: this will soon go look at readme
-const enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1);
+let enviromentWithCapital = "";
+if (environment) {
+    enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1);
+}
 
 checkIfArchiveFolderExistsElseCreate(process.env.PWD + "/" + DEFAULTS.apkOutputPath);
 validateInputs(application, environment, version);

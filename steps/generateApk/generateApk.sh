@@ -1,5 +1,6 @@
 #!/bin/sh
 app=$1
+#TODO: environment here isn't used
 enviroment=$2
 version=$3
 enviromentWithCapital=$4

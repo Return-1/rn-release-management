@@ -70,16 +70,30 @@ You can see the documentation of each individual step in the `/steps` folder
 # Future work :
 
 ### High prio
-1. Currently there's this issue where version provided by the cli is not respected, it's only used as a description, so find a way to unify that and see if it should be the versioning.js file that should be respected/incremented or not.
 
 2. Make it work even without flavors. Prompt if no flavor/environment combo is provided with info saying it is suggested to do so
 
-3. Save a list of commits in the device all that have a prefix of COMPANYNAMEDEVL_xxxx where xxxx is the number
+3. Save a list of commits in the device all that have a prefix of COMPANYNAMEDEVEL_xxxx where xxxx is the number of the ticket so we know what each version has in it. Can even create an importable React Native screen for that and place it in /rnrm or overrideable folder. This screen will also have version number information ( taken from DeviceInfo of course ) and other developer friendly stuff. Ideally searchable commits. That sounds pretty wild. Make the array of data be kinda easy to copy paste. Maybe make this a component not a screen.
+
+4. Hash envs should also be here as a step so devs know what they don't have in common. Make it also per file not one huge file and put them in the envHashes folder ( if not exist then create )
+
+5. Step to get current version from store.
+ios : let requestURL = "https://itunes.apple.com/lookup?bundleId=\(bundleId)" ( it works i checked ). Maybe even make a releases tab for this.
 
 ### Low prio/later:
 -3 building on iOS
--4STEP: uploading apk ssh
 -5 DEFAULTS should be overrideable in scripts.config.js
--6 should make envData be allowed to add comments on first line etc and parse it better
--7 Is there really any reason to have the envs be env.flavorName.envName.js instead of going for the complete final variant like say <appName><envName>.env.js? This would help the code not need the capitalize function
+-6 should make envData be better. Etc. be allowed to add comments on first line etc and parse it better. Additionally now config.js in rnrm is of the same const envData = format cause it's convenient but should change that. 
 -8 generate apk size history default and overrideable log output location
+
+## Concerns migrating
+
+Why not provide version in cli anymore?
+> Because you can't easily see the commit history, only after the fact. It's better to be changing it centrally after seeing exactly what the previous version was. Description is still allowed.
+
+Why use .rnrmtemplate files instead of file tags like before?
+> Basically previous attempt was faulty in .plist files that were stripping extra comments and xcode is generally messing around. Also, this is a lot easier to code and maintain and clearer as to what changes are being made by a simple file diffing approach.
+
+Also:
+-We should probably only use the capitalized version of the environment to avoid confusion so for exmaple Production and Preview. As such it would be best to rename envs accordingly so like : 
+`env.appName.Preview.js`
