@@ -8,7 +8,6 @@ const {
     uploadApk,
     tagBranch,
 } = require("rn-release-management")
-const versioning = require("./versioning")
 let context = getContext(process);
 
 //Environment setup
