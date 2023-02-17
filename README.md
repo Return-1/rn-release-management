@@ -15,13 +15,18 @@ Current features:
 - Storing all your binaries (apks,aabs) in a folder so you've got access to them
 - Upload your apk to a slack channel
 
+**iOS (WIP)**
+nothing here yet but you can use changeEnvironment in your build scripts
+
 # Setting up
+
+Clone this project on the same folder level as your project.
 ### Env files
 
-A core concern of this library is making sure that you only need to set your env variables in one place and need not concern yourself with making sure your native files ( such as plist files ) or your build flavor have included the right environment. In your .js files, all you need to do is import a main env.js file from src/env.js and this library will make sure that file's contents are as needed.
+A core concern of this library is making sure that you only need to set your env variables in one place and need not concern yourself with making sure your native files ( such as plist files ) or your build flavor have included the right environment. In your `.js` files, all you need to do is import a main `env.js` file from `src/env.js` and this library will make sure that file's contents are as needed.
 
-You have set up an /envs folder that lives in /src/envs and the env filenames look like
-env.<appName><appEnvironment>
+You have set up an `/envs` folder that lives in `..rootOfYourProject/src/envs` and the env filenames look like
+`env.<appName><appEnvironment>`
 
 The env file contents are expected to look like :
 ```js
@@ -45,9 +50,9 @@ Run `rnrm.js --init` and this will create some files needed from this library to
 Currently by default `/rnrm` contains two recipies ( which is nothing more than a series of commonly used steps for changing the environment or building and distributing your android app privately)
 
 ### I wanna change my environment
-`node rnrm/changeEnvironment.js flavorName environment` 
+`node rnrm/changeEnvironment.js [flavorName] [environment]` 
 
-`node rnrm/releaseAndroid.js flavorName environment x.x.x "some description"`
+`node rnrm/releaseAndroid.js [flavorName] [environment] x.x.x "some description"`
 
 ### Available Steps to make your own recipe
 
@@ -71,6 +76,9 @@ You can see the documentation of each individual step in the `/steps` folder
 
 ### High prio
 
+1. Maybe kill console logs centrally from index.js file on config
+2. Maybe add commit from which version was built and branch in ENV
+
 2. Make it work even without flavors. Prompt if no flavor/environment combo is provided with info saying it is suggested to do so
 
 3. Save a list of commits in the device all that have a prefix of COMPANYNAMEDEVEL_xxxx where xxxx is the number of the ticket so we know what each version has in it. Can even create an importable React Native screen for that and place it in /rnrm or overrideable folder. This screen will also have version number information ( taken from DeviceInfo of course ) and other developer friendly stuff. Ideally searchable commits. That sounds pretty wild. Make the array of data be kinda easy to copy paste. Maybe make this a component not a screen.
@@ -86,7 +94,7 @@ ios : let requestURL = "https://itunes.apple.com/lookup?bundleId=\(bundleId)" ( 
 -6 should make envData be better. Etc. be allowed to add comments on first line etc and parse it better. Additionally now config.js in rnrm is of the same const envData = format cause it's convenient but should change that. 
 -8 generate apk size history default and overrideable log output location
 
-## Concerns migrating
+## Concerns migrating from our current build system
 
 Why not provide version in cli anymore?
 > Because you can't easily see the commit history, only after the fact. It's better to be changing it centrally after seeing exactly what the previous version was. Description is still allowed.

@@ -16,5 +16,8 @@
     "javascript-obfuscator": "^1.3.0",
     "loose-json": "^1.1.2",
     "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {
+    "@types/node": "^18.13.0"
   }
 }
