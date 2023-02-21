@@ -21,6 +21,8 @@ nothing here yet but you can use changeEnvironment in your build scripts
 # Setting up
 
 Clone this project on the same folder level as your project.
+`cd rn-release management` and run `npm link`
+then go to your project and run `npm link rn-release-management`
 ### Env files
 
 A core concern of this library is making sure that you only need to set your env variables in one place and need not concern yourself with making sure your native files ( such as plist files ) or your build flavor have included the right environment. In your `.js` files, all you need to do is import a main `env.js` file from `src/env.js` and this library will make sure that file's contents are as needed.
@@ -44,7 +46,7 @@ You have setup flavors on android/app/build.gradle file that look like
 
 ### Initializing
 
-Run `rnrm.js --init` and this will create some files needed from this library to operate.
+Run `rnrm init` and this will create some files needed from this library to operate.
 
 # Recipes
 Currently by default `/rnrm` contains two recipies ( which is nothing more than a series of commonly used steps for changing the environment or building and distributing your android app privately)
