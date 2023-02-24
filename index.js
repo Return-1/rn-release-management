@@ -17,6 +17,8 @@ module.exports = {
     generateFilesFromTemplates: wrapInRunStep("generateFilesFromTemplates"),
     tagBranch: wrapInRunStep("tagBranch"),
     uploadApk: wrapInRunStep("uploadApk"),
+    //less important
+    generateAppInfoComponent: wrapInRunStep("generateAppInfoComponent"),
     //helpers,
     wrapWithContext,
 }

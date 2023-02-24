@@ -3,6 +3,7 @@ const {
     //actions
     generateEnvFile,
     generateFilesFromTemplates,
+    generateAppInfoComponent,
     generateApk,
     generateApkSizeHistory,
     uploadApk,
@@ -27,9 +28,17 @@ generateFilesFromTemplates({
     }
 });
 
+generateAppInfoComponent({
+    ...context, userProps: {
+        filter: "NVDEVEL"
+    }
+})
+
 //APK generation, uploading and tagging. Usually on release candidate
 generateApk(context)
 generateApkSizeHistory(context)
+
+
 uploadApk({
     ...context, userProps: {
         slackToken: "xxxxx",

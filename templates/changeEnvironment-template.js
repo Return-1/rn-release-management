@@ -2,6 +2,8 @@ const {
     getContext,
     //actions
     generateEnvFile,
+    generateFilesFromTemplates,
+    generateAppInfoComponent,
 } = require("rn-release-management")
 let context = getContext(process);
 
@@ -11,3 +13,18 @@ generateEnvFile({
         shouldObfuscate: false,
     }
 });
+
+generateFilesFromTemplates({
+    ...context, userProps: {
+        autodetect: true,
+        injectedChangeData: {
+            //your own data
+        },
+    }
+});
+
+generateAppInfoComponent({
+    ...context, userProps: {
+        filter: "NVDEVEL"
+    }
+})

@@ -21,7 +21,8 @@ nothing here yet but you can use changeEnvironment in your build scripts
 # Setting up
 
 Clone this project on the same folder level as your project.
-`cd rn-release management` and run `npm link`
+
+`cd rn-release-management` and run`npm install` then `npm link`
 then go to your project and run `npm link rn-release-management`
 ### Env files
 
