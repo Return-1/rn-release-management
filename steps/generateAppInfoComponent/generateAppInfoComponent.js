@@ -1,21 +1,23 @@
 const fs = require('fs')
 const chalk = require('chalk')
 const { getScriptParamsAsObject, checkIfArchiveFolderExistsElseCreate } = require("../../helpers")
-let { spawnSync } = require('child_process');
+let { spawnSync, execSync } = require('child_process');
+const os = require('os');
 
 //TODO: This could be a loooot better
 const { cliProps: {
     projectPath,
 }, userProps: {
-    filter = ""
+    commitsFilter = ""
 } } = getScriptParamsAsObject(process.argv)
 
-//1. GET COMMITS AND FILTER THEM BY `filter`
+//0. GET SYSTEM INFORMATION
+let systemInfo = getSystemInformation()
 
-let filterCommitsBy = filter;
+//1. GET COMMITS AND FILTER THEM BY `commitsFilter`
 console.log(__dirname + "/" + `getGitLogHistory.sh`)
 
-var proc = spawnSync(`bash`, [__dirname + "/" + `getGitLogHistory.sh`, filterCommitsBy], { stdio: 'pipe' })
+var proc = spawnSync(`bash`, [__dirname + "/" + `getGitLogHistory.sh`, commitsFilter], { stdio: 'pipe' })
 
 if (proc.status !== 0) {
     console.log(chalk.red("ERROR: generateAndroidApk.sh"))
@@ -55,18 +57,70 @@ fs.writeFileSync(`${projectPath}/rnrm/RNRMAppInfo/commitData.js`, finalString)
 //TODO: make this into a template in THIS folder
 fs.writeFileSync(`${projectPath}/rnrm/RNRMAppInfo/RNRMAppInfo.js`, `
 import React from "react";
-import {View, Text} from "react-native";
-import {commitData} from "./commitData"
+import { View, Text, ScrollView } from "react-native";
+import { commitData } from "./commitData"
+import DeviceInfo from 'react-native-device-info';
 
 const RNRMAPPInfo = () => {
     return (
-        <View>
-            {commitData.map(item => {
-                return         <Text>{item}</Text>
-            })}
+        <View style={{ flex: 1 }}>
+        <ScrollView>
+            <Header title={"App Information"} />
+            <AppInformation />
+
+            <Header title={"Commit Data , 2 months"} />
+            <CommitData />
+        </ScrollView>
         </View>
-        )
+    )
+}
+
+const Header = ({ title }) => {
+    return <Text style={{ fontWeight: "bold", fontSize: 20 }}>{title}</Text>
+}
+
+const AppInformation = () => {
+    return (<>
+        <Text>Device info</Text>
+        <Text>{DeviceInfo.getBundleId()}</Text>
+        <Text>Build number</Text>
+        <Text>{DeviceInfo.getBuildNumber()}</Text>
+        <Text>Version</Text>
+        <Text>{DeviceInfo.getVersion()}</Text>
+        <Text>{"Environment ( WIP )"}</Text>
+        <Text>{"System that build this app"}</Text>
+        <Text>${systemInfo}</Text>
+    </>)
+}
+
+const CommitData = () => {
+    return <>
+        {commitData.map((item,index) => {
+            return <Text>{index+" >>> "+item}</Text>
+        })}
+    </>
 }
 
 export default RNRMAPPInfo
 `)
+
+//FUNCTIONS
+
+function getSystemInformation() {
+    // Get the date and time the script was run
+    const date = new Date().toLocaleString();
+    // Get the name of the computer running the script
+    const hostname = os.hostname();
+
+    // Get system information
+    const systemInfo = execSync('uname -a').toString().trim()
+    const user = execSync('whoami').toString().trim()
+
+    let result = `
+date: ${date}
+on: ${hostname}
+by: ${user}
+System information: ${systemInfo}`;
+
+    return result;
+}
