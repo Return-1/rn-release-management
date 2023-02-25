@@ -12,11 +12,11 @@ const wrapInRunStep = (scriptName, successMessageOverride, errorMessageOverride)
 module.exports = {
     getContext,
     generateEnvFile: wrapInRunStep("generateEnvFile"),
-    generateApk: wrapInRunStep("generateApk"),
-    generateApkSizeHistory: wrapInRunStep("generateApkSizeHistory"),
+    generateBinaryAndroid: wrapInRunStep("generateBinaryAndroid"),
+    generateAppSizeHistory: wrapInRunStep("generateAppSizeHistory"),
     generateFilesFromTemplates: wrapInRunStep("generateFilesFromTemplates"),
     tagBranch: wrapInRunStep("tagBranch"),
-    uploadApk: wrapInRunStep("uploadApk"),
+    uploadApp: wrapInRunStep("uploadApp"),
     //less important
     generateAppInfoComponent: wrapInRunStep("generateAppInfoComponent"),
     //helpers,

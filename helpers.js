@@ -109,7 +109,12 @@ function wrapWithContext(funcArr, context) {
 const DEFAULTS = {
     envFilePath: "src/envs",
     envFilePathOutput: "src",
-    apkOutputPath: "IGNORABLES/archiveAPKs"
+    apkOutputPath: "IGNORABLES/archiveAPKs",
+    aabOutputPath: "IGNORABLES/archiveAABs",
+}
+const AVAILABLE_PACKAGING_FORMATS = {
+    aab: 'aab',
+    apk: 'apk',
 }
 
 module.exports = {
@@ -123,4 +128,5 @@ module.exports = {
     checkIfArchiveFolderExistsElseCreate,
     wrapWithContext,
     DEFAULTS,
+    AVAILABLE_PACKAGING_FORMATS,
 }

@@ -1,16 +1,24 @@
+const fs = require('fs')
 const { spawnSync } = require('child_process');
 const chalk = require('chalk');
 const { getScriptParamsAsObject, DEFAULTS } = require("../../helpers")
 
 const { cliProps: {
-    outputFileName
+    outputApkFileName,
+    outputAabFileName,
 }, userProps: {
     slackChannelIds,
     slackToken,
 } } = getScriptParamsAsObject(process.argv)
 
 console.log("In uploadApk.js")
-const filePath = process.env.PWD + "/" + DEFAULTS.apkOutputPath + "/" + outputFileName
+const apkFilePath = process.env.PWD + "/" + DEFAULTS.apkOutputPath + "/" + outputApkFileName
+const aabFilePath = process.env.PWD + "/" + DEFAULTS.aabOutputPath + "/" + outputAabFileName
+let filePath = apkFilePath
+
+if (fs.existsSync(aabFilePath)) {
+    filePath = aabFilePath
+}
 console.log("upload to slack script will find file in:\n", filePath)
 
 if (!slackChannelIds || !slackToken) {
@@ -19,7 +27,7 @@ if (!slackChannelIds || !slackToken) {
 }
 
 var proc = spawnSync(`bash`, [
-    `${__dirname}/uploadApk.sh`,
+    `${__dirname}/uploadApp.sh`,
     `${slackChannelIds.join(",")}`, //ARGUMENT 1 the slack channel
     `${slackToken}`, //ARGUMENT 2 the slack token
     `${filePath}`, //ARGUMENT 3 , the filepath

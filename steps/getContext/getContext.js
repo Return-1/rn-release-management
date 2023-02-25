@@ -15,9 +15,10 @@ const getContext = (process) => {
         enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1);
     }
 
-    const outputFileName = application + enviromentWithCapital + version + description + ".apk"
+    const outputApkFileName = application + enviromentWithCapital + version + description + ".apk"
+    const outputAabFileName = application + enviromentWithCapital + version + description + ".aab"
 
-    console.log(`Running for ${application} | ${environment} | ${version} and will produce:\n ${outputFileName}`)
+    console.log(`Running for ${application} | ${environment} | ${version} and will produce:\n ${outputApkFileName} or ${outputAabFileName}`)
     if (description) { console.log(`WITH Description: ${description}`) }
 
     //other things to inject
@@ -33,7 +34,8 @@ const getContext = (process) => {
             environment,
             version,
             description,
-            outputFileName,
+            outputApkFileName,
+            outputAabFileName,
             projectPath: process.env.PWD,
             cliPath: __dirname,
             //other things to inject

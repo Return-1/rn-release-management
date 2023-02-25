@@ -4,9 +4,9 @@ const {
     generateEnvFile,
     generateFilesFromTemplates,
     generateAppInfoComponent,
-    generateApk,
-    generateApkSizeHistory,
-    uploadApk,
+    generateBinaryAndroid,
+    generateAppSizeHistory,
+    uploadApp,
     tagBranch,
 } = require("rn-release-management")
 let context = getContext(process);
@@ -34,12 +34,19 @@ generateAppInfoComponent({
     }
 })
 
-//APK generation, uploading and tagging. Usually on release candidate
-generateApk(context)
-generateApkSizeHistory(context)
+//Android packaging generation, uploading and tagging. Usually on release candidate
+//The packagingFormat property controls the packaging format for the application.
+//By default, the packaging format is apk.To change the packaging format to aab, 
+//uncomment the packagingFormat property and set it to "aab":
+generateBinaryAndroid({
+    ...context, userProps: {
+        // packagingFormat: "aab",
+    }
+})
 
+generateAppSizeHistory(context)
 
-uploadApk({
+uploadApp({
     ...context, userProps: {
         slackToken: "xxxxx",
         slackChannelIds: [
@@ -47,4 +54,5 @@ uploadApk({
         ]
     }
 })
+
 tagBranch(context);
