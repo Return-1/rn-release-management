@@ -25,3 +25,4 @@ If this is empty it is not applied
 
 ### TODO
 -Add a simple searchbar in RNRMAppInfo for commits
+-Group commits by date (add header) and make them look better

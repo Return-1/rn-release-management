@@ -79,7 +79,12 @@ You can see the documentation of each individual step in the `/steps` folder
 
 ### High prio
 
-1. Maybe kill console logs centrally from index.js file on config
+!!!!
+!!!!
+1. We need to have a centralized concept of versioning as right now command line version ( which is only used for naming and config.js version do not align in any way.)
+!!!!
+!!!!
+
 2. Maybe add commit from which version was built and branch in ENV
 
 2. Make it work even without flavors. Prompt if no flavor/environment combo is provided with info saying it is suggested to do so
@@ -96,6 +101,7 @@ ios : let requestURL = "https://itunes.apple.com/lookup?bundleId=\(bundleId)" ( 
 -5 DEFAULTS should be overrideable in scripts.config.js
 -6 should make envData be better. Etc. be allowed to add comments on first line etc and parse it better. Additionally now config.js in rnrm is of the same const envData = format cause it's convenient but should change that. 
 -8 generate apk size history default and overrideable log output location
+-instruct users to make index.js into index.rnrm-template.js so that we can kill logs centrally.
 
 ## Concerns migrating from our current build system
 
