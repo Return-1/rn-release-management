@@ -1,15 +1,16 @@
 const program = require("commander")
 const { getCurrentBranchName } = require("./helpers")
+const { envFileToObject } = require("../../helpers")
 
 const getContext = (process) => {
-    //cli arguments to inject
+
+    //1. cli arguments to inject
     const application = process.argv[2];
     const environment = process.argv[3];
-    const version = process.argv[4] || ""
+    let version = process.argv[4] || ""
     const description = process.argv[5] || ""
 
-    //todo: look at readme can prolly do away with this
-
+    //TODO: look at readme can prolly do away with this
     let enviromentWithCapital = "";
     if (environment) {
         enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1);
@@ -20,7 +21,18 @@ const getContext = (process) => {
     console.log(`Running for ${application} | ${environment} | ${version} and will produce:\n ${outputFileName}`)
     if (description) { console.log(`WITH Description: ${description}`) }
 
-    //other things to inject
+    //2 config data
+    //read the data in the config file
+    const rnrmConfigData = envFileToObject(`${process.env.PWD}/rnrm/config.js`);
+    //WIP get the version that corresponds to this app
+    let foundVersionKey = Object.keys(rnrmConfigData).find(item => {
+        return item.includes("RNRM_SEMANTIC_VERSION") && item.includes(application)
+    })
+    if (foundVersionKey) {
+        version = rnrmConfigData[foundVersionKey]
+    }
+
+    //3. other things to inject
     const currentBranchName = getCurrentBranchName();
     if (!currentBranchName) {
         console.log("!!!Issue with getting current branch");
@@ -38,6 +50,7 @@ const getContext = (process) => {
             cliPath: __dirname,
             //other things to inject
             currentBranchName,
+            rnrmConfigData,
         },
         userProps: {}
     }

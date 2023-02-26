@@ -7,6 +7,7 @@ const os = require('os');
 //TODO: This could be a loooot better
 const { cliProps: {
     projectPath,
+    currentBranchName,
 }, userProps: {
     commitsFilter = ""
 } } = getScriptParamsAsObject(process.argv)
@@ -77,11 +78,8 @@ function createGitInformationFile(commitsFilter) {
     //1. get commit history as a json array string
     let commitHistoryJSONArrayString = getCommitHistoryJSONString();
 
-    //2. get name of current branch
-    const branchName = execSync('git rev-parse --abbrev-ref HEAD').toString().trim()
-
     let exportableString = `export const commitData = [\n${commitHistoryJSONArrayString}\n];
-export const branchName = "${branchName}"`;
+export const branchName = "${currentBranchName}"`;
 
     fs.writeFileSync(`${projectPath}/rnrm/RNRMAppInfo/commitData.js`, exportableString)
 }

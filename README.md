@@ -75,6 +75,13 @@ You can see the documentation of each individual step in the `/steps` folder
 
 `tagBranch`
 
+### Other things to note:
+$RNRM_SEMANTIC_VERSION
+$RNRM_BUILD_NUMBER
+
+these suffixes hold special meaning at the end of env variables on the config.js file
+e.g steps that utilize those are `bumpConfigVersions` and `getContext`
+
 # Future work :
 
 ### High prio
