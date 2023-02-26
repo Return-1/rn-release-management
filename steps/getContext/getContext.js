@@ -13,9 +13,9 @@ const getContext = (process, bumpBuildNumber = true,) => {
     //TODO: Make those parseable with flags instead of order
     const application = process.argv[2];
     const environment = process.argv[3];
-    let semanticVersion = process.argv[4] || ""
+    const description = process.argv[4] || ""
+    let semanticVersion = "";
     let buildNumber = "_unset";
-    const description = process.argv[5] || ""
 
     //TODO: look at readme can prolly do away with this
     let enviromentWithCapital = "";
@@ -73,7 +73,7 @@ const getContext = (process, bumpBuildNumber = true,) => {
     //===4. set output file name
     //=================
 
-    const outputFileName = application + enviromentWithCapital + semanticVersion + "_buildNo" + buildNumber + description + ".apk"
+    const outputFileName = application + enviromentWithCapital + "V" + semanticVersion + "_buildNo" + buildNumber + description + ".apk"
     console.log(`Running for
     application: ${application}
     environment: ${environment}
