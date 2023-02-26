@@ -1,13 +1,14 @@
 ### Instructions 
 
-This step will do the following :
-1. Create a .js file in `<projectRoot>/rnrm/RNRMAppInfo/commitData.js` that has 2 months worth of commit data filtered by the `commitsFilter` parametered passed in this step as well as other git information
-2. Create a .js file in `<projectRoot>/rnrm/RNRMAppInfo/systemInfo.js` that has general system info so we know which machine has build the binary.
-3. Create a file in `<projectRoot>/rnrm/RNRMAppInfo/RNRMAppInfo.js` that will import the `commitData.js` file and the and `systemInfo.js` file and include general app and build information.
+This step will generate three files in the project's `rnrm/RNRMAppInfo` directory:
+
+`commitData.js` - contains commit data filtered by the commitsFilter parameter as well as other Git information for the past two months.
+`systemInfo.js` - contains general system information so we know which machine built the binary.
+`RNRMAppInfo.js` - imports the `commitData.js` and `systemInfo.js` files and includes general app and build information.
 
 ### Motivation
 
-It would be good to know for certain when a certain commit has made it into the built app, which machine build it, what version it is etc
+It's helpful to know exactly when a certain commit was included in a built app, which machine built it, and what version it is.
 
 ### Run step example
 
@@ -21,8 +22,7 @@ generateAppInfoComponent({
 
 ### Params
 
-`commitsFilter`
-If this is empty it is not applied
+`commitsFilter` - This parameter is optional. If it is not provided, the filter will not be applied.
 
 ### TODO
 -Add a simple searchbar in RNRMAppInfo for commits
