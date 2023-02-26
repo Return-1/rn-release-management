@@ -10,6 +10,7 @@ const { cliProps: {
     files = [], //the list of files to work on 
     injectedChangeData = {}, //change data to include, basically merge with envData
     autodetect = true,
+    failIfPlaceholdersStillLeft = true,
 } } = getScriptParamsAsObject(process.argv)
 
 const envData = envFileToObject(`${process.env.PWD}/${DEFAULTS.envFilePathOutput}/env.js`);
@@ -89,6 +90,15 @@ function generateFilesFromTemplates(filepathsWithChangeData) {
             let regex = new RegExp(text, 'g')
             fileDataAsString = fileDataAsString.replace(regex, changeData.replaceWith)
         })
+
+        //If anything %% is left, we should know
+        if (failIfPlaceholdersStillLeft) {
+            const regex = /%{2}.*?%{2}/; //basically %%whatever but 1+ characters%%
+            if (regex.test(fileDataAsString)) {
+                console.log(chalk.red("Placeholder still left on file : " + item.filePath))
+                process.exit(1)
+            }
+        }
 
         fs.writeFileSync(item.filePath.replace(".rnrmtemplate", ""), fileDataAsString)
     })

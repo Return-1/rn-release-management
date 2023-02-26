@@ -8,7 +8,7 @@ const { cliProps: {
     application,
     environment,
     version,
-    description,
+    outputFileName,
 } } = getScriptParamsAsObject(process.argv)
 
 //TODO: this will soon go look at readme
@@ -18,11 +18,11 @@ if (environment) {
 }
 
 checkIfArchiveFolderExistsElseCreate(process.env.PWD + "/" + DEFAULTS.apkOutputPath);
-validateInputs(application, environment, version);
+// validateInputs(application, environment, version);
 
 console.log(`generateAndroidApk.sh for ${application} ${enviromentWithCapital} ${version}`);
 
-var proc = spawnSync(`bash`, [__dirname + "/" + `generateApk.sh`, `${application}`, `${environment}`, `${version + description}`, `${enviromentWithCapital}`, `${DEFAULTS.apkOutputPath}`], { stdio: 'inherit' })
+var proc = spawnSync(`bash`, [__dirname + "/" + `generateApk.sh`, `${application}`, `${enviromentWithCapital}`, `${DEFAULTS.apkOutputPath}`, `${outputFileName.replace(".apk", "")}`,], { stdio: 'inherit' })
 
 if (proc.status === 0) {
     console.log(chalk.green("SUCCESS: generateAndroidApk.sh"))
@@ -31,6 +31,7 @@ if (proc.status === 0) {
     process.exit(1);
 }
 
+//currently unused
 function validateInputs(application, environment, version) {
     if (!application || !environment) {
         console.error(chalk.red("Wrong application name or environment "));

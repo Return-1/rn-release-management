@@ -74,6 +74,7 @@ const runStep = ({ scriptName, params, successMessage = "", failMessage = "", sc
     const scriptToExecuteDir = __dirname + "/steps/" + scriptName + "/" + scriptName + ".js"
 
     var procX = spawnSync("node", [scriptToExecuteDir, JSON.stringify(params)], { stdio: "inherit" })
+    // console.log(chalk.blue("process status : " + procX.status))
     if (procX.status !== 0) {
         console.log(chalk.red(failMessage))
         process.exit(1);

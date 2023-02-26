@@ -11,9 +11,11 @@ const getContext = (process, bumpBuildNumber = true,) => {
     //=================
 
     //TODO: Make those parseable with flags instead of order
+    //TODO: Make sure application/environment can be only a set of predefined fields
+    //as set in a future file named allowedInputs.js?
     const application = process.argv[2];
     const environment = process.argv[3];
-    const description = process.argv[4] || ""
+    let description = process.argv[4] || ""
     let semanticVersion = "";
     let buildNumber = "_unset";
 
@@ -31,7 +33,6 @@ const getContext = (process, bumpBuildNumber = true,) => {
     //================
     if (bumpBuildNumber) {
         const rnrmConfigData = envFileToObject(`${projectPath}/rnrm/config.js`);
-        console.log(rnrmConfigData)
         let foundBuildNumber = Object.keys(rnrmConfigData).find(item => {
             return item.includes("RNRM_BUILD_NUMBER") && item.includes(application)
         })
@@ -72,8 +73,9 @@ const getContext = (process, bumpBuildNumber = true,) => {
     //=================
     //===4. set output file name
     //=================
+    description = "_buildNo" + buildNumber + description
 
-    const outputFileName = application + enviromentWithCapital + "V" + semanticVersion + "_buildNo" + buildNumber + description + ".apk"
+    const outputFileName = application + enviromentWithCapital + semanticVersion + description + ".apk"
     console.log(`Running for
     application: ${application}
     environment: ${environment}

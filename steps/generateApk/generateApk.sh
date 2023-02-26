@@ -1,12 +1,11 @@
 #!/bin/sh
 app=$1
-#TODO: environment here isn't used
-enviroment=$2
-version=$3
-enviromentWithCapital=$4
-apkOutputPath=$5
+enviromentWithCapital=$2
+apkOutputPath=$3
+whatToNameTheApk=$4
 
-versionName=$app$enviromentWithCapital$version
+set -e # exit immediately if a command exits with a non-zero status
+
 echo -e "in generate apk sh file !! version name: "$versionName
 pwd
 cd ./android
@@ -19,6 +18,6 @@ echo -e "\n\n~~~generateApk.sh: DONE WITH CLEANING\n\n"
 echo -e "Will now run:\n ./gradlew assemble"$app""$enviromentWithCapital"Release"
 ./gradlew assemble"$app""$enviromentWithCapital"Release
 echo -e "\n\n~~~generateApk.sh: DONE WITH ASSEMBLING RELEASE\n\n"
-cp  app/build/outputs/apk/"${app}""$enviromentWithCapital"/release/app-$app$enviromentWithCapital-release.apk ../$apkOutputPath/$versionName.apk
+cp  app/build/outputs/apk/"${app}""$enviromentWithCapital"/release/app-$app$enviromentWithCapital-release.apk ../$apkOutputPath/$whatToNameTheApk.apk
 echo -e "\n\n~~~generateApk.sh: DONE WITH COPYING. Contents of archive folder:\n\n"
 ls ../IGNORABLES/archiveAPKs
