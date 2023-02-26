@@ -11,6 +11,7 @@ const wrapInRunStep = (scriptName, successMessageOverride, errorMessageOverride)
 
 module.exports = {
     getContext,
+    isCorrectBranch: wrapInRunStep("isCorrectBranch"),
     generateEnvFile: wrapInRunStep("generateEnvFile"),
     generateApk: wrapInRunStep("generateApk"),
     generateApkSizeHistory: wrapInRunStep("generateApkSizeHistory"),

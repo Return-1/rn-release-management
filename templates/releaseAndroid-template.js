@@ -1,6 +1,7 @@
 const {
     getContext,
     //actions
+    isCorrectBranch,
     generateEnvFile,
     generateFilesFromTemplates,
     generateAppInfoComponent,
@@ -11,6 +12,7 @@ const {
 } = require("rn-release-management")
 let context = getContext(process);
 
+isCorrectBranch({ ...context, userProps: { branchName: "master" } })
 //Environment setup
 generateEnvFile({
     ...context, userProps: {

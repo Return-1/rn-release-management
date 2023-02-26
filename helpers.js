@@ -50,6 +50,7 @@ function envFileToObject(pathToEnv) {
 //This turns a string that containts js object {...}
 //formatted data into the const envData = {...}
 //structure that the app modules expect on import
+//TODO: This expect stuff to be passed in here after JSON.stringify(the data we care about, null, "\t") has been run on them and i don't like it, need to change.
 function objectStringToEnvString(data) {
     let splitArray = data.split('\n');
     splitArray.shift();

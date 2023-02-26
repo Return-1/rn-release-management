@@ -92,6 +92,8 @@ e.g steps that utilize those are `bumpConfigVersions` and `getContext`
 !!!!
 !!!!
 
+1.1. Bump versions with $RNRM_SEMANTIC_VERSION $RNRM_BUILD_NUMBER automatically in the bump step
+
 2. Maybe add commit from which version was built and branch in ENV
 
 2. Make it work even without flavors. Prompt if no flavor/environment combo is provided with info saying it is suggested to do so
