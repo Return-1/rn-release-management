@@ -5,10 +5,14 @@ import DeviceInfo from 'react-native-device-info';
 import { commitData, branchName } from "./commitData"
 import { systemInfo } from "./systemInfo.js"
 
+
+
 const RNRMAPPInfo = () => {
     return (
         <View style={{ flex: 1 }}>
             <ScrollView>
+
+                <Warning />
 
                 <Header title={"App Information"} />
                 <AppInformation />
@@ -21,8 +25,16 @@ const RNRMAPPInfo = () => {
     )
 }
 
+const Warning = () => {
+    return <Text style={{ color: "red", fontWeight: "bold" }}>
+        {`This is a developer screen.
+If you're seeing this we would appreciate it if you could contact support as it is a bug with our application.
+    `}
+    </Text>
+}
+
 const Header = ({ title }) => {
-    return <Text style={{ marginTop: 10, fontWeight: "bold", fontSize: 20 }}>{title}</Text>
+    return <Text style={{ marginVertical: 10, fontWeight: "bold", fontSize: 20, backgroundColor: "#E0E0E0" }}>{title}</Text>
 }
 
 const AppInformation = () => {

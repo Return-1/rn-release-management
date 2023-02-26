@@ -14,19 +14,19 @@ const { cliProps: {
 //SETUP
 checkIfArchiveFolderExistsElseCreate(`${projectPath}/rnrm/RNRMAppInfo`)
 
-//0. GET SYSTEM INFORMATION
+//1. GET SYSTEM INFORMATION
 createSystemInformationFile()
 
-//1. GET COMMITS AND FILTER THEM BY `commitsFilter`
-createCommitHistoryFile(commitsFilter)
+//2. GET GIT INFORMATION (branch,commits) AND FILTER COMMITS BY `commitsFilter`
+createGitInformationFile(commitsFilter)
 
-//2. CREATE RNRMAPPInfo file
-let templateAppInfoComponent = fs.readFileSync(`${__dirname}/RNRMAppInfo-template.js`).toString()
-fs.writeFileSync(`${projectPath}/rnrm/RNRMAppInfo/RNRMAppInfo.js`, templateAppInfoComponent)
+//3. CREATE RNRMAPPInfo FILE
+createRNRMAPPInfoFile();
 
 ///////////
-//FUNCTIONS
+//FUNCTIONS------
 ///////////
+
 function createSystemInformationFile() {
     // Get the date and time the script was run
     const date = new Date().toLocaleString();
@@ -48,33 +48,46 @@ function createSystemInformationFile() {
     fs.writeFileSync(`${projectPath}/rnrm/RNRMAppInfo/systemInfo.js`, exportableString)
 }
 
-function createCommitHistoryFile(commitsFilter) {
+function createGitInformationFile(commitsFilter) {
 
-    var proc = spawnSync(`bash`, [__dirname + "/" + `getGitLogHistory.sh`, commitsFilter], { stdio: 'pipe' })
+    function getCommitHistoryJSONString() {
+        var proc = spawnSync(`bash`, [__dirname + "/" + `getGitLogHistory.sh`, commitsFilter], { stdio: 'pipe' })
 
-    if (proc.status !== 0) {
-        console.log(chalk.red("ERROR: generateAndroidApk.sh"))
-        process.exit(1);
-    } else {
-        console.log("ok with getting git logs")
+        if (proc.status !== 0) {
+            console.log(chalk.red("ERROR: generateAndroidApk.sh"))
+            process.exit(1);
+        } else {
+            console.log("ok with getting git logs")
+        }
+
+
+        let commitHistoryStringOutput = proc.output[1].toString()
+        let commitHistoryArrayOutput = commitHistoryStringOutput?.split("\n")
+        commitHistoryArrayOutput.pop()
+
+        //make commit history into json string so we can store in file and beautify
+        let commitHistoryJSONArrayString = JSON.stringify(commitHistoryArrayOutput, null, 2)
+        commitHistoryJSONArrayString = commitHistoryJSONArrayString
+            .replace(/^\[|\]$/g, '') // remove square brackets at beginning and end
+            .trim(); // remove leading/trailing whitespace
+
+        return commitHistoryJSONArrayString;
     }
 
-    let stringOutput = proc.output[1].toString()
-    let arrayOutput = stringOutput?.split("\n")
-    arrayOutput.pop()
+    //1. get commit history as a json array string
+    let commitHistoryJSONArrayString = getCommitHistoryJSONString();
 
-    let arrayContents = JSON.stringify(arrayOutput, null, 2)
-
-    //BEAUTIFY ( not necessary for it to work)
-    arrayContents = arrayContents
-        .replace(/^\[|\]$/g, '') // remove square brackets at beginning and end
-        .trim(); // remove leading/trailing whitespace
-
-    //ALSO GET NAME OF CURRENT BRANCH
+    //2. get name of current branch
     const branchName = execSync('git rev-parse --abbrev-ref HEAD').toString().trim()
 
-
-    let exportableString = `export const commitData = [\n${arrayContents}\n];
+    let exportableString = `export const commitData = [\n${commitHistoryJSONArrayString}\n];
 export const branchName = "${branchName}"`;
+
     fs.writeFileSync(`${projectPath}/rnrm/RNRMAppInfo/commitData.js`, exportableString)
+}
+
+function createRNRMAPPInfoFile() {
+    let templateAppInfoComponent = fs.readFileSync(`${__dirname}/RNRMAppInfo-template.js`).toString()
+    fs.writeFileSync(`${projectPath}/rnrm/RNRMAppInfo/RNRMAppInfo.js`, templateAppInfoComponent)
+
 }

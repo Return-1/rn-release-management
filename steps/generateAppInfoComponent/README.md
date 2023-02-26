@@ -1,8 +1,9 @@
 ### Instructions 
 
 This step will do the following :
-1. Create a .js file in `<projectRoot>/rnrm/RNRMAppInfo/commitData.js` that has 2 months worth of commit data filtered by the `commitsFilter` parametered passed in this step.
-2. Create a file in `<projectRoot>/rnrm/RNRMAppInfo/RNRMAppInfo.js` that will import the commitData.js file and include general app and build information.
+1. Create a .js file in `<projectRoot>/rnrm/RNRMAppInfo/commitData.js` that has 2 months worth of commit data filtered by the `commitsFilter` parametered passed in this step as well as other git information
+2. Create a .js file in `<projectRoot>/rnrm/RNRMAppInfo/systemInfo.js` that has general system info so we know which machine has build the binary.
+3. Create a file in `<projectRoot>/rnrm/RNRMAppInfo/RNRMAppInfo.js` that will import the `commitData.js` file and the and `systemInfo.js` file and include general app and build information.
 
 ### Motivation
 

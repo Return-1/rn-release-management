@@ -14,17 +14,5 @@ generateEnvFile({
     }
 });
 
-generateFilesFromTemplates({
-    ...context, userProps: {
-        autodetect: true,
-        injectedChangeData: {
-            //your own data
-        },
-    }
-});
-
-generateAppInfoComponent({
-    ...context, userProps: {
-        filter: "NVDEVEL"
-    }
-})
+generateFilesFromTemplates(context);
+generateAppInfoComponent(context)

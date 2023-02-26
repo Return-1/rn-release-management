@@ -19,25 +19,12 @@ generateEnvFile({
     }
 });
 
-generateFilesFromTemplates({
-    ...context, userProps: {
-        autodetect: true,
-        injectedChangeData: {
-            //your own data
-        },
-    }
-});
-
-generateAppInfoComponent({
-    ...context, userProps: {
-        filter: "NVDEVEL"
-    }
-})
+generateFilesFromTemplates(context);
+generateAppInfoComponent(context)
 
 //APK generation, uploading and tagging. Usually on release candidate
 generateApk(context)
 generateApkSizeHistory(context)
-
 
 uploadApk({
     ...context, userProps: {

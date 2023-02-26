@@ -97,6 +97,7 @@ You can see the documentation of each individual step in the `/steps` folder
 ios : let requestURL = "https://itunes.apple.com/lookup?bundleId=\(bundleId)" ( it works i checked ). Maybe even make a releases tab for this.
 
 ### Low prio/later:
+-2 Instead of requiring a buttload of steps it would be better to just require RNRM and imperatively call the steps like RNRM.generateEnv(context)
 -3 building on iOS
 -5 DEFAULTS should be overrideable in scripts.config.js
 -6 should make envData be better. Etc. be allowed to add comments on first line etc and parse it better. Additionally now config.js in rnrm is of the same const envData = format cause it's convenient but should change that. 
