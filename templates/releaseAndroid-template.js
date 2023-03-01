@@ -1,58 +1,39 @@
 const {
     getContext,
     //actions
+    isCorrectBranch,
     generateEnvFile,
     generateFilesFromTemplates,
     generateAppInfoComponent,
-    generateBinaryAndroid,
-    generateAppSizeHistory,
-    uploadApp,
+    generateAndroidBinary,
+    generateApkSizeHistory,
+    uploadAndroidBinary,
     tagBranch,
 } = require("rn-release-management")
 let context = getContext(process);
 
+isCorrectBranch({ branchName: "master" })
 //Environment setup
 generateEnvFile({
-    ...context, userProps: {
-        withoutLogs: true,
-        shouldObfuscate: false, //todo: change to false soon
-    }
+    withoutLogs: true,
+    shouldObfuscate: false, //todo: change to false soon
 });
 
-generateFilesFromTemplates({
-    ...context, userProps: {
-        autodetect: true,
-        injectedChangeData: {
-            //your own data
-        },
-    }
-});
-
-generateAppInfoComponent({
-    ...context, userProps: {
-        filter: "NVDEVEL"
-    }
-})
+generateFilesFromTemplates();
+generateAppInfoComponent()
 
 //Android packaging generation, uploading and tagging. Usually on release candidate
 //The packagingFormat property controls the packaging format for the application.
 //By default, the packaging format is apk.To change the packaging format to aab, 
 //uncomment the packagingFormat property and set it to "aab":
-generateBinaryAndroid({
-    ...context, userProps: {
-        // packagingFormat: "aab",
-    }
-})
+generateAndroidBinary()
+generateApkSizeHistory()
 
-generateAppSizeHistory(context)
-
-uploadApp({
-    ...context, userProps: {
-        slackToken: "xxxxx",
-        slackChannelIds: [
-            'xxxxx', //some channel
-        ]
-    }
+uploadAndroidBinary({
+    slackToken: "xxxxx",
+    slackChannelIds: [
+        'xxxxx', //some channel
+    ]
 })
 
 tagBranch(context);

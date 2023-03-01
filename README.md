@@ -1,35 +1,56 @@
 # What this tool provides for you
 
-This cli tool provides you with a series of useful steps that can be run to automate your mobile releases and manage your environment variables in one place. Flavor friendly.
+This CLI tool offers a collection of commonly needed steps that can be executed directly from the root of your project. It facilitates the process of building and automating your mobile releases, and simplifies the management of your environment variables. Flavor friendly.
 
-Current features:
+Here's a sample recipe that demonstrates how these steps can be utilized to build your app:
 
-**Both platforms (ios,android):**
-- managing envs so don't need to worry if your build variant has the right env file included
-- using env files to make sure your native files are properly configured (e.g plists)
-- tag branch on build
+```js
+// Check if the build is being done on the correct branch, otherwise fail
+isCorrectBranch({ ...context, userProps: { branchName: "master" } })
 
-**Android only:**
-- building the proper flavor/environment combination on Android (apk only soon aab)
-- Keeping a log of how your apk size changes per build so bloat doesn't sneak up on you
-- Storing all your binaries (apks,aabs) in a folder so you've got access to them
-- Upload your apk to a slack channel
+// Generate the environment file with appropriate environment/flavor and
+// configure native files like .plists or build.gradle
+generateEnvFile(context);
+generateAppInfoComponent(context)
 
-**iOS (WIP)**
-nothing here yet but you can use changeEnvironment in your build scripts
+// Generate the APK with a sensible name convention (e.g., myApp_staging_v1.0.0_buildNo1412_date.apk)
+generateApk(context)
 
-# Setting up
+// Populate a cumulative log of APK size history to track if the APK has bloated in size
+generateApkSizeHistory(context)
+
+// Upload the APK to Slack
+uploadApk(context)
+
+// Tag the branch to identify where the build was performed
+tagBranch(context);
+
+// Create a React Native component that displays device info such as build version, semantic version,
+// and a list of two months' worth of commits. Useful for developers to know
+// what the current version contains when imported in the app and where it was built.
+generateAppInfoComponent(context)
+```
+
+# Setting up ( soon on npm, follow this for now )
 
 Clone this project on the same folder level as your project.
 
-`cd rn-release-management` and run`npm install` then `npm link`
-then go to your project and run `npm link rn-release-management`
+```
+cd rn-release-management
+npm install
+npm link
+```
+
+Then go to your own project and run
+```
+npm link rn-release-management
+```
+
 ### Env files
 
-A core concern of this library is making sure that you only need to set your env variables in one place and need not concern yourself with making sure your native files ( such as plist files ) or your build flavor have included the right environment. In your `.js` files, all you need to do is import a main `env.js` file from `src/env.js` and this library will make sure that file's contents are as needed.
+This library ensures that you only need to set your environment variables in one location. You don't have to worry about adding the correct environment to your native files (e.g., .plist files) or build flavors. Simply import the main env.js file from src/env.js in your .js files, and the library takes care of everything.
 
-You have set up an `/envs` folder that lives in `..rootOfYourProject/src/envs` and the env filenames look like
-`env.<appName><appEnvironment>`
+The convention is to create a `..rootOfYourProject/src/envs` folder with environment filenames in the format `env.<appName><appEnvironment>.js`.
 
 The env file contents are expected to look like :
 ```js
@@ -39,31 +60,38 @@ const envData = {
 export default envData
 ```
 
-### Flavors
-
-We're currently making the assumption that you've got set up flavors on Android
-You have setup flavors on android/app/build.gradle file that look like
-[appName][appEnvironment(e.g staging|production|whatever)]
+This library automatically selects the correct environment file based on your flavor/environment and generates an env.js file accordingly, which you can import into your files.
 
 ### Initializing
 
-Run `rnrm init` and this will create some files needed from this library to operate.
+Execute `rnrm init` to create the necessary files required for this library to function.
 
 # Recipes
-Currently by default `/rnrm` contains two recipies ( which is nothing more than a series of commonly used steps for changing the environment or building and distributing your android app privately)
 
-### I wanna change my environment
+Recipes are prebuilt `.js` files located in rnrm that execute common sequences of steps.
+
+Currently, /rnrm contains two default recipes: changeEnvironment.js for changing the environment and releaseAndroid.js for building and privately distributing your Android app.
+
+After executing rnrm init, you can locate these recipes in your project. Feel free to customize them or create new ones to suit your needs.
+
+### Executing example recipe for changing the environment
 `node rnrm/changeEnvironment.js [flavorName] [environment]` 
-
-`node rnrm/releaseAndroid.js [flavorName] [environment] x.x.x "some description"`
+### Executing example recipe for releasing an android .apk binary
+`node rnrm/releaseAndroid.js [flavorName] [environment] "some description"`
 
 ### Available Steps to make your own recipe
 
-You can see the documentation of each individual step in the `/steps` folder
+Refer to the corresponding README.md file in the /steps folder to access the documentation for each individual step.
+
+A list of all available steps can be found below:
+
+`isCorrectBranch`
 
 `getContext`
 
 `generateEnvFile`
+
+`generateAppInfoComponent`
 
 `generateFilesFromTemplates`
 
@@ -75,36 +103,52 @@ You can see the documentation of each individual step in the `/steps` folder
 
 `tagBranch`
 
+### Flavors
+
+We're currently making the assumption that you've got set up flavors on Android
+You have setup flavors on android/app/build.gradle file that look like
+[appName][appEnvironment(e.g staging|production|whatever)]
+
+### Other things to note ( definitely need to rewrite this part and move some of it to getContext ):
+
+We do enforce the convention that the semantic version and build number will be derived by the config.js file. For more information refer to the `getContext` step. The convention looks like this
+
+If you're trying to build with flavorName = myApp then getContext will look into the config.js file for
+myApp_$RNRM_BUILD_NUMBER and increment it. It will also look for myApp_$RNRM_SEMANTIC_VERSION and use it to set the semantic version of the app
+
+These suffixes hold special meaning at the end of env variables on the config.js file
+e.g steps that utilize those are `bumpConfigVersions` and `getContext`
+
 # Future work :
 
 ### High prio
 
-1. Maybe kill console logs centrally from index.js file on config
-2. Maybe add commit from which version was built and branch in ENV
+0. Cleanup context-temp.json at the end with a cleanup() step
 
-2. Make it work even without flavors. Prompt if no flavor/environment combo is provided with info saying it is suggested to do so
+1. step to commit version bumping.
 
-3. Save a list of commits in the device all that have a prefix of COMPANYNAMEDEVEL_xxxx where xxxx is the number of the ticket so we know what each version has in it. Can even create an importable React Native screen for that and place it in /rnrm or overrideable folder. This screen will also have version number information ( taken from DeviceInfo of course ) and other developer friendly stuff. Ideally searchable commits. That sounds pretty wild. Make the array of data be kinda easy to copy paste. Maybe make this a component not a screen.
+2. Make sure it works without flavors and if it doesn't, see what needs to be done for it do be able to.
+
+3. building on iOS
 
 4. Hash envs should also be here as a step so devs know what they don't have in common. Make it also per file not one huge file and put them in the envHashes folder ( if not exist then create )
 
-5. Step to get current version from store.
-ios : let requestURL = "https://itunes.apple.com/lookup?bundleId=\(bundleId)" ( it works i checked ). Maybe even make a releases tab for this.
-
 ### Low prio/later:
--3 building on iOS
+
+-1 .rnrmtemplate to be before the file extension because it breaks formatting and linting
+-2 Instead of requiring a buttload of steps it would be better to just require RNRM and imperatively call the steps like RNRM.generateEnv(context)
+--We should probably only use the capitalized version of the environment to avoid confusion so for exmaple Production and Preview. As such it would be best to rename envs accordingly so like : 
+`env.appName.Preview.js`
+
 -5 DEFAULTS should be overrideable in scripts.config.js
 -6 should make envData be better. Etc. be allowed to add comments on first line etc and parse it better. Additionally now config.js in rnrm is of the same const envData = format cause it's convenient but should change that. 
 -8 generate apk size history default and overrideable log output location
+-9 instruct users to make index.js into index.rnrm-template.js so that we can kill logs centrally.
+-10 Step to get current version from store.
+ios : let requestURL = "https://itunes.apple.com/lookup?bundleId=\(bundleId)" ( it works i checked ). Maybe even make a releases tab for this.
 
-## Concerns migrating from our current build system
+## OTHER
 
-Why not provide version in cli anymore?
-> Because you can't easily see the commit history, only after the fact. It's better to be changing it centrally after seeing exactly what the previous version was. Description is still allowed.
-
-Why use .rnrmtemplate files instead of file tags like before?
-> Basically previous attempt was faulty in .plist files that were stripping extra comments and xcode is generally messing around. Also, this is a lot easier to code and maintain and clearer as to what changes are being made by a simple file diffing approach.
-
-Also:
--We should probably only use the capitalized version of the environment to avoid confusion so for exmaple Production and Preview. As such it would be best to rename envs accordingly so like : 
-`env.appName.Preview.js`
+(move to appropriate step)
+Why use .rnrmtemplate files?
+> Lots of native files in many places require env management, it's hard to be changing all the .plists build.gradle files and whatever flavor specific file needed all the time. Adding meta tags helps
