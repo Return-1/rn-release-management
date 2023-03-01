@@ -14,7 +14,7 @@ module.exports = {
     isCorrectBranch: wrapInRunStep("isCorrectBranch"),
     generateEnvFile: wrapInRunStep("generateEnvFile"),
     generateAndroidBinary: wrapInRunStep("generateAndroidBinary"),
-    generateApkSizeHistory: wrapInRunStep("generateApkSizeHistory"),
+    generateAndroidBinarySizeHistory: wrapInRunStep("generateAndroidBinarySizeHistory"),
     generateFilesFromTemplates: wrapInRunStep("generateFilesFromTemplates"),
     tagBranch: wrapInRunStep("tagBranch"),
     uploadAndroidBinary: wrapInRunStep("uploadAndroidBinary"),

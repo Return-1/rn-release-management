@@ -3,6 +3,7 @@ const chalk = require('chalk')
 
 //ours
 var { isVersionStringValid, getScriptParamsAsObject, checkIfArchiveFolderExistsElseCreate, DEFAULTS, createContextFile } = require("../../helpers");
+const { AVAILABLE_PACKAGING_FORMATS } = require('./helpers');
 
 let context = getScriptParamsAsObject(process.argv)
 const { cliProps: {
@@ -11,7 +12,7 @@ const { cliProps: {
     version,
     outputFileName,
 }, userProps: {
-    packagingFormat = "apk", //.aab or .apk
+    packagingFormat = AVAILABLE_PACKAGING_FORMATS.apk, //.aab or .apk
 } } = context;
 
 //TODO: this will soon go look at readme
@@ -20,7 +21,7 @@ if (environment) {
     enviromentWithCapital = environment[0].toUpperCase() + environment.substring(1);
 }
 
-const { dir: binaryArchiveOutputPath } = checkIfArchiveFolderExistsElseCreate(process.env.PWD + "/" + DEFAULTS.androidBinaryOutputPath + packagingFormat);
+const { dir: binaryArchiveOutputPath } = checkIfArchiveFolderExistsElseCreate(`${process.env.PWD}/${DEFAULTS.androidBinaryOutputPath}${packagingFormat}`);
 
 //PACKAGE EVERYTHING INTO CONTEXT cliProps so it's available for later steps
 generateContextForStep(packagingFormat, outputFileName, binaryArchiveOutputPath);
@@ -31,7 +32,7 @@ var proc = spawnSync(`bash`,
     [__dirname + "/" + `generateAndroidBinary.sh`,
     `${application}`,
     `${enviromentWithCapital}`,
-    `${dir}`,
+    `${binaryArchiveOutputPath}`,
     `${outputFileName}`,
         packagingFormat], { stdio: 'inherit' })
 

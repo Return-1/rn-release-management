@@ -2,16 +2,16 @@ const { spawnSync } = require('child_process');
 const chalk = require('chalk');
 const { getScriptParamsAsObject, DEFAULTS } = require("../../helpers")
 
+const context = getScriptParamsAsObject(process.argv)
 const { cliProps: {
-    outputFileName
+    finalOutputFilePath
 }, userProps: {
     slackChannelIds,
     slackToken,
-} } = getScriptParamsAsObject(process.argv)
+} } = context
 
-console.log("In uploadApk.js")
-const filePath = process.env.PWD + "/" + DEFAULTS.apkOutputPath + "/" + outputFileName
-console.log("upload to slack script will find file in:\n", filePath)
+console.log("In uploadAndroidBinary.js")
+console.log("upload to slack script will find file in:\n", finalOutputFilePath)
 
 if (!slackChannelIds || !slackToken) {
     console.log("Missing filename or slackChannel/slackToken. Have you specified those?")
@@ -19,10 +19,10 @@ if (!slackChannelIds || !slackToken) {
 }
 
 var proc = spawnSync(`bash`, [
-    `${__dirname}/uploadApk.sh`,
+    `${__dirname}/uploadAndroidBinary.sh`,
     `${slackChannelIds.join(",")}`, //ARGUMENT 1 the slack channel
     `${slackToken}`, //ARGUMENT 2 the slack token
-    `${filePath}`, //ARGUMENT 3 , the filepath
+    `${finalOutputFilePath}`, //ARGUMENT 3 , the filepath
 ], { stdio: 'inherit' })
 
 if (proc.status === 0) {
