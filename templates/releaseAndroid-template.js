@@ -5,35 +5,31 @@ const {
     generateEnvFile,
     generateFilesFromTemplates,
     generateAppInfoComponent,
-    generateApk,
+    generateAndroidBinary,
     generateApkSizeHistory,
-    uploadApk,
+    uploadAndroidBinary,
     tagBranch,
 } = require("rn-release-management")
 let context = getContext(process);
 
-isCorrectBranch({ ...context, userProps: { branchName: "master" } })
+isCorrectBranch({ branchName: "master" })
 //Environment setup
 generateEnvFile({
-    ...context, userProps: {
-        withoutLogs: true,
-        shouldObfuscate: false, //todo: change to false soon
-    }
+    withoutLogs: true,
+    shouldObfuscate: false, //todo: change to false soon
 });
 
-generateFilesFromTemplates(context);
-generateAppInfoComponent(context)
+generateFilesFromTemplates();
+generateAppInfoComponent()
 
 //APK generation, uploading and tagging. Usually on release candidate
-generateApk(context)
-generateApkSizeHistory(context)
+generateAndroidBinary()
+generateApkSizeHistory()
 
-uploadApk({
-    ...context, userProps: {
-        slackToken: "xxxxx",
-        slackChannelIds: [
-            'xxxxx', //some channel
-        ]
-    }
+uploadAndroidBinary({
+    slackToken: "xxxxx",
+    slackChannelIds: [
+        'xxxxx', //some channel
+    ]
 })
 tagBranch(context);

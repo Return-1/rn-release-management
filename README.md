@@ -123,7 +123,9 @@ e.g steps that utilize those are `bumpConfigVersions` and `getContext`
 
 ### High prio
 
-0. step to commit version bumping.
+0. Cleanup context-temp.json at the end with a cleanup() step
+
+1. step to commit version bumping.
 
 2. Make sure it works without flavors and if it doesn't, see what needs to be done for it do be able to.
 

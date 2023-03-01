@@ -13,11 +13,11 @@ module.exports = {
     getContext,
     isCorrectBranch: wrapInRunStep("isCorrectBranch"),
     generateEnvFile: wrapInRunStep("generateEnvFile"),
-    generateApk: wrapInRunStep("generateApk"),
+    generateAndroidBinary: wrapInRunStep("generateAndroidBinary"),
     generateApkSizeHistory: wrapInRunStep("generateApkSizeHistory"),
     generateFilesFromTemplates: wrapInRunStep("generateFilesFromTemplates"),
     tagBranch: wrapInRunStep("tagBranch"),
-    uploadApk: wrapInRunStep("uploadApk"),
+    uploadAndroidBinary: wrapInRunStep("uploadAndroidBinary"),
     //less important
     generateAppInfoComponent: wrapInRunStep("generateAppInfoComponent"),
     //helpers,

@@ -2,7 +2,7 @@ const program = require("commander")
 const fs = require('fs');
 
 const { getCurrentBranchName } = require("./helpers")
-const { envFileToObject, objectStringToEnvString } = require("../../helpers")
+const { envFileToObject, objectStringToEnvString, createContextFile } = require("../../helpers")
 
 const getContext = (process, bumpBuildNumber = true,) => {
 
@@ -75,7 +75,7 @@ const getContext = (process, bumpBuildNumber = true,) => {
     //=================
     description = "_buildNo" + buildNumber + description
 
-    const outputFileName = application + enviromentWithCapital + semanticVersion + description + ".apk"
+    const outputFileName = application + enviromentWithCapital + semanticVersion + description
     console.log(`Running for
     application: ${application}
     environment: ${environment}
@@ -101,6 +101,8 @@ const getContext = (process, bumpBuildNumber = true,) => {
         },
         userProps: {}
     }
+
+    createContextFile(allContext, projectPath + "/rnrm")
 
     return allContext;
 }

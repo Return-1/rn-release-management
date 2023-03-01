@@ -5,14 +5,10 @@ const {
     generateFilesFromTemplates,
     generateAppInfoComponent,
 } = require("rn-release-management")
-let context = getContext(process);
+
+getContext(process);
 
 //Environment setup
-generateEnvFile({
-    ...context, userProps: {
-        shouldObfuscate: false,
-    }
-});
-
-generateFilesFromTemplates(context);
-generateAppInfoComponent(context)
+generateEnvFile({ shouldObfuscate: false });
+generateFilesFromTemplates();
+generateAppInfoComponent()

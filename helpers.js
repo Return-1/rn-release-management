@@ -15,9 +15,9 @@ function checkIfArchiveFolderExistsElseCreate(dir) {
     if (!fs.existsSync(dir)) {
         console.log(dir + " doesn't exist. Creating ...")
         fs.mkdirSync(dir, { recursive: true });
-        return { exists: false }
+        return { exists: false, dir }
     } else {
-        return { exists: true }
+        return { exists: true, dir }
     }
 }
 
@@ -60,12 +60,18 @@ function objectStringToEnvString(data) {
 }
 
 const getScriptParamsAsObject = scriptArgs => {
+    //context as taken from file
+    let context = readContextFile()
+
+    //arguments as passed in the script as a string in json format
+    let arguments = {};
     if (scriptArgs && scriptArgs[2]) {
         let jsonParam = scriptArgs[2];
-        let arguments = JSON.parse(jsonParam)
-        return arguments;
+        arguments = JSON.parse(jsonParam)
     }
-    return {}
+
+    context.userProps = arguments
+    return context;
 }
 
 //STEP RUNNER
@@ -73,7 +79,7 @@ const runStep = ({ scriptName, params, successMessage = "", failMessage = "", sc
     logStep(`${scriptOrder}. Calling ${scriptName}`)
     const scriptToExecuteDir = __dirname + "/steps/" + scriptName + "/" + scriptName + ".js"
 
-    var procX = spawnSync("node", [scriptToExecuteDir, JSON.stringify(params)], { stdio: "inherit" })
+    var procX = spawnSync("node", [scriptToExecuteDir, JSON.stringify(params || {})], { stdio: "inherit" })
     // console.log(chalk.blue("process status : " + procX.status))
     if (procX.status !== 0) {
         console.log(chalk.red(failMessage))
@@ -111,7 +117,17 @@ function wrapWithContext(funcArr, context) {
 const DEFAULTS = {
     envFilePath: "src/envs",
     envFilePathOutput: "src",
-    apkOutputPath: "IGNORABLES/archiveAPKs"
+    androidBinaryOutputPath: "IGNORABLES/archive_",
+}
+
+//CONTEXT MANAGEMENT
+const createContextFile = (context) => {
+    fs.writeFileSync(process.env.PWD + "/rnrm/context-temp.json", JSON.stringify(context, null, 4))
+}
+
+const readContextFile = () => {
+    //TODO: check if file exists
+    return JSON.parse(fs.readFileSync(process.env.PWD + "/rnrm/context-temp.json").toString())
 }
 
 module.exports = {
@@ -124,5 +140,7 @@ module.exports = {
     runStep,
     checkIfArchiveFolderExistsElseCreate,
     wrapWithContext,
+    createContextFile,
+    readContextFile,
     DEFAULTS,
 }
