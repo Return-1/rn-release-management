@@ -18,6 +18,7 @@ module.exports = {
     generateFilesFromTemplates: wrapInRunStep("generateFilesFromTemplates"),
     tagBranch: wrapInRunStep("tagBranch"),
     uploadAndroidBinary: wrapInRunStep("uploadAndroidBinary"),
+    commitAndPushVersionBump: wrapInRunStep("commitAndPushVersionBump"),
     //less important
     generateAppInfoComponent: wrapInRunStep("generateAppInfoComponent"),
     //helpers,
