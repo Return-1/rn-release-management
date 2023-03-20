@@ -1,10 +1,6 @@
 #!/bin/sh
-
-application=$1
-version=$2
-buildNumber=$3
-branchName=$4
-commitMessage=$5
+branchName=$1
+commitMessage=$2
 
 
 set -e # exit immediately if a command exits with a non-zero status

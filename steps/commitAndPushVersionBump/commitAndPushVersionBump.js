@@ -15,9 +15,6 @@ const { cliProps: {
 
 const commitAndPushProcess = spawnSync(`bash`, [
     `${__dirname}/commitAndPushVersionBump.sh`,
-    application,
-    version,
-    buildNumber,
     currentBranchName,
     commitMessage,
 ], { stdio: 'inherit' })
