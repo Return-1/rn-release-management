@@ -39,7 +39,9 @@ uploadAndroidBinary({
     slackToken: "xxxxx",
     slackChannelIds: [
         'xxxxx', //some channel
-    ]
+    ],
+    serverIPAddress: 'xxxxxx',
+    serverUploadDirectory: 'xxxxx',
 })
 
 tagBranch();
