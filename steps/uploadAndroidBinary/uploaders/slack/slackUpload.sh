@@ -1,3 +1,4 @@
+#!/bin/bash 
 slackChannels=$1
 slackToken=$2
 apkPath=$3

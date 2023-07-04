@@ -1,39 +1,31 @@
-const { spawnSync } = require('child_process');
-const chalk = require('chalk');
-const { getScriptParamsAsObject, DEFAULTS } = require("../../helpers")
+const { getScriptParamsAsObject } = require("../../helpers")
+const { processUploadToSlack } = require('./uploaders/slack/index')
+const { processUploadToServer } = require('./uploaders/scp/index');
+
 
 let { cliProps: {
     finalOutputFilePath
 }, userProps: {
     slackChannelIds: slackChannelIdsFromUserProps,
     slackToken: slackTokenFromUserProps,
+    serverIPAddress: serverIPAddressFromUserProps,
+    serverUploadDirectory: serverUploadDirectoryFromUserProps
 }, envProps: {
     RNRM_uploadAndroidBinary_slackChannelIds,
     RNRM_uploadAndroidBinary_slackToken,
+    RNRM_uploadAndroidBinary_serverIPAddress,
+    RNRM_uploadAndroidBinary_serverUploadDirectory,
 } } = getScriptParamsAsObject(process.argv)
 
-//give priority to one or the other
-slackChannelIds = slackChannelIdsFromUserProps || RNRM_uploadAndroidBinary_slackChannelIds
-slackToken = slackTokenFromUserProps || RNRM_uploadAndroidBinary_slackToken
+//slack
+slackChannelIds = slackChannelIdsFromUserProps || RNRM_uploadAndroidBinary_slackChannelIds;
+slackToken = slackTokenFromUserProps || RNRM_uploadAndroidBinary_slackToken;
 
-//begin
-console.log("In uploadAndroidBinary.js")
-console.log("upload to slack script will find file in:\n", finalOutputFilePath)
+//scp
+serverIPAddress = serverIPAddressFromUserProps || RNRM_uploadAndroidBinary_serverIPAddress;
+serverUploadDirectory = serverUploadDirectoryFromUserProps || RNRM_uploadAndroidBinary_serverUploadDirectory;
 
-if (!slackChannelIds || !slackToken) {
-    console.log("Missing filename or slackChannel/slackToken. Have you specified those?")
-    process.exit(1);
-}
+console.log("In uploadAndroidBinary.js");
+processUploadToServer(serverIPAddress, serverUploadDirectory, finalOutputFilePath);
+processUploadToSlack(slackChannelIds, slackToken, finalOutputFilePath);
 
-var proc = spawnSync(`bash`, [
-    `${__dirname}/uploadAndroidBinary.sh`,
-    `${slackChannelIds}`, //ARGUMENT 1 the slack channels ( comma separated if many)
-    `${slackToken}`, //ARGUMENT 2 the slack token
-    `${finalOutputFilePath}`, //ARGUMENT 3 , the filepath
-], { stdio: 'inherit' })
-
-if (proc.status === 0) {
-    console.log(chalk.green("Upload Apk succesfully"))
-} else {
-    console.log(chalk.red("Upload Apk got an error"))
-}
